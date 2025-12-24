@@ -228,3 +228,5 @@ $.fn.keditor = function (options) {
 };
 
 window.KEditor = $.keditor = $.fn.keditor.constructor = KEditor;
+
+export default KEditor;
