@@ -16,8 +16,8 @@ KEditor.components['audio'] = {
     initSettingForm: function (form, keditor) {
         form.append(
             '<form class="form-horizontal">' +
-            '     <div class="form-group">' +
-            '         <label class="col-sm-12">Audio file</label>' +
+            '     <div class="mb-3">' +
+            '         <label class="col-sm-12 form-label">Audio file</label>' +
             '         <div class="col-sm-12">' +
             '             <div class="audio-toolbar">' +
             '                 <a href="#" class="btn-audio-upload btn btn-sm btn-primary"><i class="fa fa-upload"></i></a>' +
@@ -25,20 +25,20 @@ KEditor.components['audio'] = {
             '             </div>' +
             '         </div>' +
             '     </div>' +
-            '     <div class="form-group">' +
-            '         <label class="col-sm-12">Autoplay</label>' +
+            '     <div class="mb-3">' +
+            '         <label class="col-sm-12 form-label">Autoplay</label>' +
             '         <div class="col-sm-12">' +
-            '             <input type="checkbox" class="audio-autoplay" />' +
+            '             <input type="checkbox" class="audio-autoplay form-check-input" />' +
             '         </div>' +
             '     </div>' +
-            '     <div class="form-group">' +
-            '         <label class="col-sm-12">Show Controls</label>' +
+            '     <div class="mb-3">' +
+            '         <label class="col-sm-12 form-label">Show Controls</label>' +
             '         <div class="col-sm-12">' +
-            '             <input type="checkbox" class="audio-controls" checked />' +
+            '             <input type="checkbox" class="audio-controls form-check-input" checked />' +
             '         </div>' +
             '     </div>' +
-            '     <div class="form-group">' +
-            '         <label class="col-sm-12">Width (%)</label>' +
+            '     <div class="mb-3">' +
+            '         <label class="col-sm-12 form-label">Width (%)</label>' +
             '         <div class="col-sm-12">' +
             '             <input type="number" min="20" max="100" class="form-control audio-width" value="100" />' +
             '         </div>' +

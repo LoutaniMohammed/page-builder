@@ -2709,7 +2709,7 @@ KEditor$1.components["audio"] = {
   },
   initSettingForm: function(form, keditor) {
     form.append(
-      '<form class="form-horizontal">     <div class="form-group">         <label class="col-sm-12">Audio file</label>         <div class="col-sm-12">             <div class="audio-toolbar">                 <a href="#" class="btn-audio-upload btn btn-sm btn-primary"><i class="fa fa-upload"></i></a>                 <input class="audio-upload" type="file" style="display: none" />             </div>         </div>     </div>     <div class="form-group">         <label class="col-sm-12">Autoplay</label>         <div class="col-sm-12">             <input type="checkbox" class="audio-autoplay" />         </div>     </div>     <div class="form-group">         <label class="col-sm-12">Show Controls</label>         <div class="col-sm-12">             <input type="checkbox" class="audio-controls" checked />         </div>     </div>     <div class="form-group">         <label class="col-sm-12">Width (%)</label>         <div class="col-sm-12">             <input type="number" min="20" max="100" class="form-control audio-width" value="100" />         </div>     </div></form>'
+      '<form class="form-horizontal">     <div class="mb-3">         <label class="col-sm-12 form-label">Audio file</label>         <div class="col-sm-12">             <div class="audio-toolbar">                 <a href="#" class="btn-audio-upload btn btn-sm btn-primary"><i class="fa fa-upload"></i></a>                 <input class="audio-upload" type="file" style="display: none" />             </div>         </div>     </div>     <div class="mb-3">         <label class="col-sm-12 form-label">Autoplay</label>         <div class="col-sm-12">             <input type="checkbox" class="audio-autoplay form-check-input" />         </div>     </div>     <div class="mb-3">         <label class="col-sm-12 form-label">Show Controls</label>         <div class="col-sm-12">             <input type="checkbox" class="audio-controls form-check-input" checked />         </div>     </div>     <div class="mb-3">         <label class="col-sm-12 form-label">Width (%)</label>         <div class="col-sm-12">             <input type="number" min="20" max="100" class="form-control audio-width" value="100" />         </div>     </div></form>'
     );
     let fileInput = form.find(".audio-upload");
     let btnAudioUpload = form.find(".btn-audio-upload");
@@ -2774,12 +2774,12 @@ KEditor$1.components["form"] = {
         dataGrid = dataGrid.split("-");
         if (div.attr("class")) {
           if (div.hasClass("fb-button")) {
-            div.find("button").wrap(`<div class="col-sm-${dataGrid[1]} col-sm-offset-${dataGrid[0]}"></div>`);
+            div.find("button").wrap(`<div class="col-sm-${dataGrid[1]} offset-sm-${dataGrid[0]}"></div>`);
           } else {
             let label = div.children("label");
             let input = div.children("input, select, textarea");
             let subDiv = div.children("div");
-            label.addClass(`control-label col-sm-${dataGrid[0]}`);
+            label.addClass(`form-label col-sm-${dataGrid[0]}`);
             if (subDiv.length > 0) {
               subDiv.addClass(`col-sm-${dataGrid[1]}`);
             } else {
@@ -2860,21 +2860,21 @@ KEditor$1.components["form"] = {
     let self = this;
     form.html(`
             <div class="form-horizontal">
-                <div class="form-group">
+                <div class="mb-3">
                     <div class="col-sm-12">
-                       <button class="btn btn-primary btn-block btn-design-form" type="button"><i class="fa fa-paint-brush"></i> Design form</button>
+                       <button class="btn btn-primary w-100 btn-design-form" type="button"><i class="fa fa-paint-brush"></i> Design form</button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-12">Action</label>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Action</label>
                     <div class="col-sm-12">
                         <input type="text" class="form-control txt-form-action" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-12">Method</label>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Method</label>
                     <div class="col-sm-12">
-                        <select class="form-control select-method">
+                        <select class="form-select select-method">
                             <option value="get">Get</option>
                             <option value="post">Post</option>
                             <option value="put">Put</option>
@@ -2882,37 +2882,37 @@ KEditor$1.components["form"] = {
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-12">Enctype</label>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Enctype</label>
                     <div class="col-sm-12">
-                        <select class="form-control select-enctype">
+                        <select class="form-select select-enctype">
                             <option value="text/plain">text/plain</option>
                             <option value="multipart/form-data">multipart/form-data</option>
                             <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-12">Layout</label>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Layout</label>
                     <div class="col-sm-12">
-                        <select class="form-control select-layout">
+                        <select class="form-select select-layout">
                             <option value="">Normal</option>
                             <option value="form-horizontal">Horizontal</option>
                             <option value="form-inline">Inline</option>
                         </select>
                     </div>
                 </div>
-                <div class="form-group select-grid-wrapper">
-                    <label class="col-sm-12">Grid setting</label>
+                <div class="mb-3 select-grid-wrapper">
+                    <label class="col-sm-12 form-label">Grid setting</label>
                     <div class="col-sm-12">
-                        <select class="form-control select-grid">
+                        <select class="form-select select-grid">
                             <option value="2-10">col-2 col-10</option>
                             <option value="3-9">col-3 col-9</option>
                             <option value="4-8">col-4 col-8</option>
                             <option value="5-7">col-5 col-7</option>
                             <option value="6-6">col-6 col-6</option>
                         </select>
-                        <small class="help-block">This setting is for width of label and control with number of cols as unit</small>
+                        <small class="form-text text-muted">This setting is for width of label and control with number of cols as unit</small>
                     </div>
                 </div>
             </div>
