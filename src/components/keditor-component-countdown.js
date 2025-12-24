@@ -11,13 +11,12 @@ KEditor.components['countdown'] = {
     
     startCountdown: function (component) {
         let countdownEl = component.find('.countdown-timer');
-        let targetDate = countdownEl.attr('data-target-date');
         
-        if (!targetDate) {
-            // Default: 7 days from now
+        // Set default if not set
+        if (!countdownEl.attr('data-target-date')) {
             let future = new Date();
             future.setDate(future.getDate() + 7);
-            targetDate = future.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
+            let targetDate = future.toISOString().slice(0, 16);
             countdownEl.attr('data-target-date', targetDate);
         }
         
@@ -26,16 +25,28 @@ KEditor.components['countdown'] = {
             clearInterval(countdownEl.data('interval'));
         }
         
+        // Store reference to DOM element for live updates
+        let countdownDom = countdownEl[0];
+        
         let updateCountdown = function () {
+            // Re-read from DOM each time to get latest value
+            let targetDate = countdownDom.getAttribute('data-target-date');
+            if (!targetDate) return;
+            
             let now = new Date().getTime();
             let target = new Date(targetDate).getTime();
             let distance = target - now;
             
+            let daysEl = countdownDom.querySelector('.countdown-days');
+            let hoursEl = countdownDom.querySelector('.countdown-hours');
+            let minutesEl = countdownDom.querySelector('.countdown-minutes');
+            let secondsEl = countdownDom.querySelector('.countdown-seconds');
+            
             if (distance < 0) {
-                countdownEl.find('.countdown-days').text('00');
-                countdownEl.find('.countdown-hours').text('00');
-                countdownEl.find('.countdown-minutes').text('00');
-                countdownEl.find('.countdown-seconds').text('00');
+                if (daysEl) daysEl.textContent = '00';
+                if (hoursEl) hoursEl.textContent = '00';
+                if (minutesEl) minutesEl.textContent = '00';
+                if (secondsEl) secondsEl.textContent = '00';
                 return;
             }
             
@@ -44,10 +55,10 @@ KEditor.components['countdown'] = {
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
-            countdownEl.find('.countdown-days').text(days.toString().padStart(2, '0'));
-            countdownEl.find('.countdown-hours').text(hours.toString().padStart(2, '0'));
-            countdownEl.find('.countdown-minutes').text(minutes.toString().padStart(2, '0'));
-            countdownEl.find('.countdown-seconds').text(seconds.toString().padStart(2, '0'));
+            if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
         };
         
         updateCountdown();
@@ -86,7 +97,7 @@ KEditor.components['countdown'] = {
         dateInput.on('change', function () {
             let component = keditor.getSettingComponent();
             component.find('.countdown-timer').attr('data-target-date', this.value);
-            self.startCountdown(component);
+            // No need to restart, the interval re-reads from DOM
         });
         
         let styleSelect = form.find('.countdown-style');

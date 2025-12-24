@@ -3855,42 +3855,47 @@ KEditor$1.components["countdown"] = {
   },
   startCountdown: function(component) {
     let countdownEl = component.find(".countdown-timer");
-    let targetDate = countdownEl.attr("data-target-date");
-    if (!targetDate) {
+    if (!countdownEl.attr("data-target-date")) {
       let future = /* @__PURE__ */ new Date();
       future.setDate(future.getDate() + 7);
-      targetDate = future.toISOString().slice(0, 16);
+      let targetDate = future.toISOString().slice(0, 16);
       countdownEl.attr("data-target-date", targetDate);
     }
     if (countdownEl.data("interval")) {
       clearInterval(countdownEl.data("interval"));
     }
+    let countdownDom = countdownEl[0];
     let updateCountdown = function() {
+      let targetDate = countdownDom.getAttribute("data-target-date");
+      if (!targetDate) return;
       let now = (/* @__PURE__ */ new Date()).getTime();
       let target = new Date(targetDate).getTime();
       let distance = target - now;
+      let daysEl = countdownDom.querySelector(".countdown-days");
+      let hoursEl = countdownDom.querySelector(".countdown-hours");
+      let minutesEl = countdownDom.querySelector(".countdown-minutes");
+      let secondsEl = countdownDom.querySelector(".countdown-seconds");
       if (distance < 0) {
-        countdownEl.find(".countdown-days").text("00");
-        countdownEl.find(".countdown-hours").text("00");
-        countdownEl.find(".countdown-minutes").text("00");
-        countdownEl.find(".countdown-seconds").text("00");
+        if (daysEl) daysEl.textContent = "00";
+        if (hoursEl) hoursEl.textContent = "00";
+        if (minutesEl) minutesEl.textContent = "00";
+        if (secondsEl) secondsEl.textContent = "00";
         return;
       }
       let days = Math.floor(distance / (1e3 * 60 * 60 * 24));
       let hours = Math.floor(distance % (1e3 * 60 * 60 * 24) / (1e3 * 60 * 60));
       let minutes = Math.floor(distance % (1e3 * 60 * 60) / (1e3 * 60));
       let seconds = Math.floor(distance % (1e3 * 60) / 1e3);
-      countdownEl.find(".countdown-days").text(days.toString().padStart(2, "0"));
-      countdownEl.find(".countdown-hours").text(hours.toString().padStart(2, "0"));
-      countdownEl.find(".countdown-minutes").text(minutes.toString().padStart(2, "0"));
-      countdownEl.find(".countdown-seconds").text(seconds.toString().padStart(2, "0"));
+      if (daysEl) daysEl.textContent = days.toString().padStart(2, "0");
+      if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, "0");
+      if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, "0");
+      if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, "0");
     };
     updateCountdown();
     let interval = setInterval(updateCountdown, 1e3);
     countdownEl.data("interval", interval);
   },
   initSettingForm: function(form, keditor) {
-    let self = this;
     let now = /* @__PURE__ */ new Date();
     let minDateTime = now.toISOString().slice(0, 16);
     form.append(`
@@ -3916,7 +3921,6 @@ KEditor$1.components["countdown"] = {
     dateInput.on("change", function() {
       let component = keditor.getSettingComponent();
       component.find(".countdown-timer").attr("data-target-date", this.value);
-      self.startCountdown(component);
     });
     let styleSelect = form.find(".countdown-style");
     styleSelect.on("change", function() {
