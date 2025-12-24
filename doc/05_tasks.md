@@ -41,6 +41,22 @@ This file lists all tasks required to implement the solutions from the documenta
 - [x] Update `examples/settings_for_container.html` **(DONE)**
 - [x] Update `examples/support_touch_device.html` **(DONE)**
 - [x] Update `examples/index.html` **(DONE)**
+- [x] Fix absolute paths for PHP server **(DONE)**
+
+---
+
+## 5. Update CKEditor to Latest Version
+
+### CKEditor Upgrade
+- [ ] Download latest CKEditor 4.x (or evaluate CKEditor 5) **(NO)**
+- [ ] Replace `examples/plugins/ckeditor-4.11.4/` with new version **(NO)**
+- [ ] Update all HTML example files with new CKEditor path **(NO)**
+- [ ] Test text component inline editing works **(NO)**
+- [ ] Verify toolbar configuration still works **(NO)**
+- [ ] Test copy/paste functionality **(NO)**
+- [ ] Test enter key behavior **(NO)**
+- [ ] Fix any deprecated API calls in `keditor-component-text.js` **(NO)**
+- [ ] Verify "Permissions policy violation: unload" warning is resolved **(NO)**
 
 ---
 
@@ -79,6 +95,7 @@ This file lists all tasks required to implement the solutions from the documenta
 |---------|--------|
 | 2. Vite Migration | ✅ Complete |
 | 3. Example Updates | ✅ Complete |
+| 5. CKEditor Update | ⏳ Pending |
 | 1. Code Cleanup | 🟡 Partial |
 | 4. Vanilla JS | ⏸️ Optional |
 
@@ -89,3 +106,5 @@ This file lists all tasks required to implement the solutions from the documenta
 1. `9858de9` - feat: Migrate from webpack to Vite for Node 18+ support
 2. `d475ab7` - chore: Update example HTML files to use new Vite dist paths  
 3. `d116917` - refactor: Remove hardcoded KEDITOR_DEBUG flag
+4. `6d7a048` - docs: Update task list with completed migration status
+5. `fa61159` - fix: Use absolute paths in examples for PHP server compatibility
