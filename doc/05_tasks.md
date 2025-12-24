@@ -6,39 +6,78 @@ This file lists all tasks required to implement the solutions from the documenta
 
 ---
 
-## 2. Node Compatibility - Vite Migration ✅
+## 6. Bootstrap 5 Migration
 
-- [x] Delete webpack.config.js, .babelrc **(DONE)**
-- [x] Create package.json with Vite dependencies **(DONE)**
-- [x] Create vite.config.js **(DONE)**
-- [x] Add default export to KEditor class **(DONE)**
-- [x] Create src/index.js combined entry point **(DONE)**
-- [x] Fix LESS import paths for Vite **(DONE)**
-- [x] Run npm install and npm run build **(DONE)**
+### Update External Dependencies
+- [ ] Download Bootstrap 5.3.x CSS and JS **(NO)**
+- [ ] Create `examples/plugins/bootstrap-5.3.3/` folder **(NO)**
+- [ ] Add Bootstrap Icons (optional, replaces Font Awesome) **(NO)**
+
+### Update Example HTML Files
+- [ ] Update `examples/basic_with_blank_content.html` - Bootstrap 5 paths **(NO)**
+- [ ] Update `examples/basic_with_content.html` **(NO)**
+- [ ] Update `examples/custom_size.html` **(NO)**
+- [ ] Update `examples/extra_settings.html` **(NO)**
+- [ ] Update `examples/index.html` **(NO)**
+- [ ] Update `examples/multi_content_area.html` **(NO)**
+- [ ] Update `examples/settings_for_container.html` **(NO)**
+- [ ] Update `examples/support_touch_device.html` **(NO)**
+
+### Update Snippets HTML
+- [ ] Update `snippets/snippets.html` - Bootstrap 5 grid classes **(NO)**
+- [ ] Update container snippets with Bootstrap 5 structure **(NO)**
+- [ ] Update component snippets with Bootstrap 5 classes **(NO)**
+
+### Update KEditor Defaults
+- [ ] Update `src/keditor/constants/defaults.js` - Bootstrap 5 grid config **(NO)**
+- [ ] Change col-sm-* default classes to Bootstrap 5 format **(NO)**
+- [ ] Update container/row structure for Bootstrap 5 **(NO)**
+
+### Update Components
+- [ ] Update `keditor-component-audio.js` - Bootstrap 5 classes **(NO)**
+- [ ] Update `keditor-component-form.js` - Bootstrap 5 form classes **(NO)**
+- [ ] Update `keditor-component-googlemap.js` **(NO)**
+- [ ] Update `keditor-component-photo.js` - responsive images **(NO)**
+- [ ] Update `keditor-component-video.js` - ratio classes **(NO)**
+- [ ] Update `keditor-component-vimeo.js` - ratio classes **(NO)**
+- [ ] Update `keditor-component-youtube.js` - ratio classes **(NO)**
+
+### Bootstrap 5 Breaking Changes to Handle
+- [ ] Update `data-toggle` to `data-bs-toggle` **(NO)**
+- [ ] Update `data-target` to `data-bs-target` **(NO)**
+- [ ] Update `data-dismiss` to `data-bs-dismiss` **(NO)**
+- [ ] Remove jQuery dependency from Bootstrap (uses Popper) **(NO)**
+- [ ] Update form classes (`form-group` → `mb-3`, etc.) **(NO)**
+- [ ] Update button classes (if any) **(NO)**
+- [ ] Update responsive embed → ratio classes **(NO)**
+
+### Add New Bootstrap 5 Components (Optional)
+- [ ] Create accordion component snippet **(NO)**
+- [ ] Create card component snippet **(NO)**
+- [ ] Create modal component snippet **(NO)**
+- [ ] Create tabs component snippet **(NO)**
+- [ ] Create carousel component snippet **(NO)**
+- [ ] Create offcanvas component snippet **(NO)**
+
+### Testing
+- [ ] Test all examples load correctly **(NO)**
+- [ ] Test grid system works **(NO)**
+- [ ] Test responsive breakpoints **(NO)**
+- [ ] Test all components render correctly **(NO)**
+- [ ] Test drag and drop still works **(NO)**
+
+### Cleanup
+- [ ] Remove old Bootstrap 3.4.1 folder (optional) **(NO)**
+- [ ] Update documentation **(NO)**
 
 ---
 
-## 3. Usage Guide - Examples & Testing ✅
+## Previous Completed Tasks
 
-- [x] Update all 8 example HTML files with new dist paths **(DONE)**
-- [x] Fix absolute paths for PHP server compatibility **(DONE)**
-
----
-
-## 5. Update CKEditor to Latest Version ✅
-
-- [x] Rewrite keditor-component-text.js for CKEditor 5 API **(DONE)**
-- [x] Use InlineEditor.create() instead of CKEDITOR.inline() **(DONE)**
-- [x] Update all HTML example files with CKEditor 5 CDN v41.4.2 **(DONE)**
-- [x] Remove CKEditor 4 external from Vite config **(DONE)**
-- [x] Modern toolbar (headings, bold, italic, underline, lists, links, colors) **(DONE)**
-
----
-
-## 1. How It Works - Project Setup
-
-- [x] Remove window.KEDITOR_DEBUG = true **(DONE)**
-- [x] Update version number in package.json **(DONE)**
+### ✅ Vite Migration - Complete
+### ✅ CKEditor 5 Update - Complete  
+### ✅ Example Updates - Complete
+### ✅ Release v0.1.0 - Complete
 
 ---
 
@@ -46,22 +85,5 @@ This file lists all tasks required to implement the solutions from the documenta
 
 | Section | Status |
 |---------|--------|
-| 2. Vite Migration | ✅ Complete |
-| 3. Example Updates | ✅ Complete |
-| 5. CKEditor 5 Update | ✅ Complete |
-| 1. Code Cleanup | ✅ Complete |
-
-**All tasks completed!**
-
----
-
-## Commits Made
-
-1. `9858de9` - Migrate from webpack to Vite for Node 18+ support
-2. `d475ab7` - Update example HTML files to use new Vite dist paths
-3. `d116917` - Remove hardcoded KEDITOR_DEBUG flag
-4. `6d7a048` - Update task list with completed migration status
-5. `fa61159` - Fix absolute paths in examples for PHP server
-6. `3cdefba` - Add CKEditor update task to task list
-7. `1d7d397` - Upgrade from CKEditor 4 to CKEditor 5
-8. `00976d7` - Update task list with CKEditor 5 upgrade complete
+| 6. Bootstrap 5 Migration | ⏳ Pending |
+| Previous Tasks | ✅ Complete |
