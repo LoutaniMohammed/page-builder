@@ -3451,4 +3451,587 @@ KEditor$1.components["youtube"] = {
     chkAutoplay.prop("checked", src.indexOf("autoplay=1") !== -1);
   }
 };
+KEditor$1.components["progress"] = {
+  settingEnabled: true,
+  settingTitle: "Progress Bar Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Value (%)</label>
+                    <div class="col-sm-12">
+                        <input type="range" class="form-range progress-value" min="0" max="100" value="50" />
+                        <span class="progress-value-display">50%</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Color</label>
+                    <div class="col-sm-12">
+                        <select class="form-select progress-color">
+                            <option value="">Default (Primary)</option>
+                            <option value="bg-success">Success (Green)</option>
+                            <option value="bg-info">Info (Cyan)</option>
+                            <option value="bg-warning">Warning (Yellow)</option>
+                            <option value="bg-danger">Danger (Red)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Options</label>
+                    <div class="col-sm-12">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input progress-striped" id="progress-striped" />
+                            <label class="form-check-label" for="progress-striped">Striped</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input progress-animated" id="progress-animated" />
+                            <label class="form-check-label" for="progress-animated">Animated</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input progress-show-label" id="progress-show-label" checked />
+                            <label class="form-check-label" for="progress-show-label">Show Label</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        `);
+    let valueInput = form.find(".progress-value");
+    let valueDisplay = form.find(".progress-value-display");
+    valueInput.on("input", function() {
+      let value = this.value;
+      valueDisplay.text(value + "%");
+      let progressBar = keditor.getSettingComponent().find(".progress-bar");
+      progressBar.css("width", value + "%").attr("aria-valuenow", value);
+      if (progressBar.parent().find(".progress-label").length) {
+        progressBar.parent().find(".progress-label").text(value + "%");
+      }
+    });
+    let colorSelect = form.find(".progress-color");
+    colorSelect.on("change", function() {
+      let progressBar = keditor.getSettingComponent().find(".progress-bar");
+      progressBar.removeClass("bg-success bg-info bg-warning bg-danger");
+      if (this.value) {
+        progressBar.addClass(this.value);
+      }
+    });
+    let stripedCheck = form.find(".progress-striped");
+    stripedCheck.on("change", function() {
+      let progressBar = keditor.getSettingComponent().find(".progress-bar");
+      progressBar.toggleClass("progress-bar-striped", this.checked);
+    });
+    let animatedCheck = form.find(".progress-animated");
+    animatedCheck.on("change", function() {
+      let progressBar = keditor.getSettingComponent().find(".progress-bar");
+      progressBar.toggleClass("progress-bar-animated", this.checked);
+    });
+    let showLabelCheck = form.find(".progress-show-label");
+    showLabelCheck.on("change", function() {
+      let component = keditor.getSettingComponent();
+      let label = component.find(".progress-label");
+      if (this.checked) {
+        if (label.length === 0) {
+          let value = component.find(".progress-bar").attr("aria-valuenow") || "50";
+          component.find(".progress").after('<div class="progress-label text-center mt-1">' + value + "%</div>");
+        }
+      } else {
+        label.remove();
+      }
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let progressBar = component.find(".progress-bar");
+    let value = progressBar.attr("aria-valuenow") || "50";
+    form.find(".progress-value").val(value);
+    form.find(".progress-value-display").text(value + "%");
+    if (progressBar.hasClass("bg-success")) form.find(".progress-color").val("bg-success");
+    else if (progressBar.hasClass("bg-info")) form.find(".progress-color").val("bg-info");
+    else if (progressBar.hasClass("bg-warning")) form.find(".progress-color").val("bg-warning");
+    else if (progressBar.hasClass("bg-danger")) form.find(".progress-color").val("bg-danger");
+    else form.find(".progress-color").val("");
+    form.find(".progress-striped").prop("checked", progressBar.hasClass("progress-bar-striped"));
+    form.find(".progress-animated").prop("checked", progressBar.hasClass("progress-bar-animated"));
+    form.find(".progress-show-label").prop("checked", component.find(".progress-label").length > 0);
+  }
+};
+KEditor$1.components["alert"] = {
+  settingEnabled: true,
+  settingTitle: "Alert Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Alert Type</label>
+                    <div class="col-sm-12">
+                        <select class="form-select alert-type">
+                            <option value="alert-primary">Primary</option>
+                            <option value="alert-secondary">Secondary</option>
+                            <option value="alert-success">Success</option>
+                            <option value="alert-danger">Danger</option>
+                            <option value="alert-warning">Warning</option>
+                            <option value="alert-info">Info</option>
+                            <option value="alert-light">Light</option>
+                            <option value="alert-dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Options</label>
+                    <div class="col-sm-12">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input alert-dismissible-check" id="alert-dismissible" />
+                            <label class="form-check-label" for="alert-dismissible">Dismissible</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        `);
+    let typeSelect = form.find(".alert-type");
+    typeSelect.on("change", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      alert2.removeClass("alert-primary alert-secondary alert-success alert-danger alert-warning alert-info alert-light alert-dark");
+      alert2.addClass(this.value);
+    });
+    let dismissibleCheck = form.find(".alert-dismissible-check");
+    dismissibleCheck.on("change", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      if (this.checked) {
+        alert2.addClass("alert-dismissible fade show");
+        if (alert2.find(".btn-close").length === 0) {
+          alert2.append('<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>');
+        }
+      } else {
+        alert2.removeClass("alert-dismissible fade show");
+        alert2.find(".btn-close").remove();
+      }
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let alert2 = component.find(".alert");
+    let types = ["alert-primary", "alert-secondary", "alert-success", "alert-danger", "alert-warning", "alert-info", "alert-light", "alert-dark"];
+    for (let type of types) {
+      if (alert2.hasClass(type)) {
+        form.find(".alert-type").val(type);
+        break;
+      }
+    }
+    form.find(".alert-dismissible-check").prop("checked", alert2.hasClass("alert-dismissible"));
+  }
+};
+KEditor$1.components["list"] = {
+  settingEnabled: true,
+  settingTitle: "List Group Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Style</label>
+                    <div class="col-sm-12">
+                        <select class="form-select list-style">
+                            <option value="">Default</option>
+                            <option value="list-group-flush">Flush (no borders)</option>
+                            <option value="list-group-numbered">Numbered</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Add Item</label>
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-sm btn-primary btn-add-item w-100">+ Add List Item</button>
+                    </div>
+                </div>
+            </form>
+        `);
+    let styleSelect = form.find(".list-style");
+    styleSelect.on("change", function() {
+      let listGroup = keditor.getSettingComponent().find(".list-group");
+      listGroup.removeClass("list-group-flush list-group-numbered");
+      if (this.value) {
+        listGroup.addClass(this.value);
+      }
+    });
+    let addItemBtn = form.find(".btn-add-item");
+    addItemBtn.on("click", function() {
+      let listGroup = keditor.getSettingComponent().find(".list-group");
+      listGroup.append('<li class="list-group-item">New Item</li>');
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let listGroup = component.find(".list-group");
+    if (listGroup.hasClass("list-group-flush")) {
+      form.find(".list-style").val("list-group-flush");
+    } else if (listGroup.hasClass("list-group-numbered")) {
+      form.find(".list-style").val("list-group-numbered");
+    } else {
+      form.find(".list-style").val("");
+    }
+  }
+};
+KEditor$1.components["breadcrumbs"] = {
+  settingEnabled: true,
+  settingTitle: "Breadcrumb Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Divider</label>
+                    <div class="col-sm-12">
+                        <select class="form-select breadcrumb-divider">
+                            <option value="/">/</option>
+                            <option value="›">›</option>
+                            <option value="→">→</option>
+                            <option value="|">|</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Add Item</label>
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-sm btn-primary btn-add-crumb w-100">+ Add Breadcrumb</button>
+                    </div>
+                </div>
+            </form>
+        `);
+    let dividerSelect = form.find(".breadcrumb-divider");
+    dividerSelect.on("change", function() {
+      let nav = keditor.getSettingComponent().find("nav");
+      nav.css("--bs-breadcrumb-divider", "'" + this.value + "'");
+    });
+    let addBtn = form.find(".btn-add-crumb");
+    addBtn.on("click", function() {
+      let breadcrumb = keditor.getSettingComponent().find(".breadcrumb");
+      let lastItem = breadcrumb.find(".breadcrumb-item").last();
+      lastItem.removeClass("active").attr("aria-current", null);
+      lastItem.html('<a href="#">' + lastItem.text() + "</a>");
+      breadcrumb.append('<li class="breadcrumb-item active" aria-current="page">New Page</li>');
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let nav = component.find("nav");
+    let divider = nav.css("--bs-breadcrumb-divider") || "/";
+    divider = divider.replace(/'/g, "");
+    form.find(".breadcrumb-divider").val(divider);
+  }
+};
+KEditor$1.components["pricing"] = {
+  settingEnabled: true,
+  settingTitle: "Pricing Table Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Columns</label>
+                    <div class="col-sm-12">
+                        <select class="form-select pricing-columns">
+                            <option value="2">2 Tiers</option>
+                            <option value="3" selected>3 Tiers</option>
+                            <option value="4">4 Tiers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Style</label>
+                    <div class="col-sm-12">
+                        <select class="form-select pricing-style">
+                            <option value="card">Card Style</option>
+                            <option value="bordered">Bordered</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        `);
+    let columnsSelect = form.find(".pricing-columns");
+    columnsSelect.on("change", function() {
+      let pricingRow = keditor.getSettingComponent().find(".pricing-row");
+      let currentCols = pricingRow.children(".pricing-col").length;
+      let newCols = parseInt(this.value);
+      if (newCols > currentCols) {
+        for (let i = currentCols; i < newCols; i++) {
+          pricingRow.append(`
+                        <div class="col-12 col-md pricing-col">
+                            <div class="card text-center">
+                                <div class="card-header">Tier ${i + 1}</div>
+                                <div class="card-body">
+                                    <h5 class="card-title pricing-amount">$${(i + 1) * 10}/mo</h5>
+                                    <ul class="list-unstyled">
+                                        <li>Feature 1</li>
+                                        <li>Feature 2</li>
+                                        <li>Feature 3</li>
+                                    </ul>
+                                    <a href="#" class="btn btn-primary">Select</a>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+        }
+      } else if (newCols < currentCols) {
+        for (let i = currentCols; i > newCols; i--) {
+          pricingRow.children(".pricing-col").last().remove();
+        }
+      }
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let cols = component.find(".pricing-col").length;
+    form.find(".pricing-columns").val(cols.toString());
+  }
+};
+KEditor$1.components["team"] = {
+  settingEnabled: true,
+  settingTitle: "Team Member Settings",
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Layout</label>
+                    <div class="col-sm-12">
+                        <select class="form-select team-layout">
+                            <option value="3">3 Members per Row</option>
+                            <option value="4">4 Members per Row</option>
+                            <option value="2">2 Members per Row</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Card Style</label>
+                    <div class="col-sm-12">
+                        <select class="form-select team-style">
+                            <option value="card">Card with Shadow</option>
+                            <option value="simple">Simple</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-sm btn-primary btn-add-member w-100">+ Add Team Member</button>
+                    </div>
+                </div>
+            </form>
+        `);
+    let layoutSelect = form.find(".team-layout");
+    layoutSelect.on("change", function() {
+      let cols = parseInt(this.value);
+      let colClass = cols === 2 ? "col-12 col-md-6" : cols === 3 ? "col-12 col-md-4" : "col-12 col-md-3";
+      keditor.getSettingComponent().find(".team-member").attr("class", "team-member " + colClass);
+    });
+    let addBtn = form.find(".btn-add-member");
+    addBtn.on("click", function() {
+      let teamRow = keditor.getSettingComponent().find(".team-row");
+      let colClass = "col-12 col-md-4";
+      teamRow.append(`
+                <div class="team-member ${colClass}">
+                    <div class="card text-center shadow-sm">
+                        <img src="https://via.placeholder.com/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
+                        <div class="card-body">
+                            <h5 class="card-title">Team Member</h5>
+                            <p class="card-text text-muted">Role / Position</p>
+                            <div class="social-links">
+                                <a href="#" class="text-primary me-2"><i class="fa fa-linkedin"></i></a>
+                                <a href="#" class="text-info me-2"><i class="fa fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let members = component.find(".team-member");
+    if (members.first().hasClass("col-md-6")) {
+      form.find(".team-layout").val("2");
+    } else if (members.first().hasClass("col-md-3")) {
+      form.find(".team-layout").val("4");
+    } else {
+      form.find(".team-layout").val("3");
+    }
+  }
+};
+KEditor$1.components["countdown"] = {
+  settingEnabled: true,
+  settingTitle: "Countdown Timer Settings",
+  init: function(contentArea, container, component, keditor) {
+    this.startCountdown(component);
+  },
+  startCountdown: function(component) {
+    let countdownEl = component.find(".countdown-timer");
+    let targetDate = countdownEl.attr("data-target-date");
+    if (!targetDate) {
+      let future = /* @__PURE__ */ new Date();
+      future.setDate(future.getDate() + 7);
+      targetDate = future.toISOString().split("T")[0];
+      countdownEl.attr("data-target-date", targetDate);
+    }
+    let updateCountdown = function() {
+      let now = (/* @__PURE__ */ new Date()).getTime();
+      let target = new Date(targetDate).getTime();
+      let distance = target - now;
+      if (distance < 0) {
+        countdownEl.find(".countdown-days").text("00");
+        countdownEl.find(".countdown-hours").text("00");
+        countdownEl.find(".countdown-minutes").text("00");
+        countdownEl.find(".countdown-seconds").text("00");
+        return;
+      }
+      let days = Math.floor(distance / (1e3 * 60 * 60 * 24));
+      let hours = Math.floor(distance % (1e3 * 60 * 60 * 24) / (1e3 * 60 * 60));
+      let minutes = Math.floor(distance % (1e3 * 60 * 60) / (1e3 * 60));
+      let seconds = Math.floor(distance % (1e3 * 60) / 1e3);
+      countdownEl.find(".countdown-days").text(days.toString().padStart(2, "0"));
+      countdownEl.find(".countdown-hours").text(hours.toString().padStart(2, "0"));
+      countdownEl.find(".countdown-minutes").text(minutes.toString().padStart(2, "0"));
+      countdownEl.find(".countdown-seconds").text(seconds.toString().padStart(2, "0"));
+    };
+    updateCountdown();
+    setInterval(updateCountdown, 1e3);
+  },
+  initSettingForm: function(form, keditor) {
+    let self = this;
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Target Date</label>
+                    <div class="col-sm-12">
+                        <input type="date" class="form-control countdown-date" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Style</label>
+                    <div class="col-sm-12">
+                        <select class="form-select countdown-style">
+                            <option value="boxes">Boxes</option>
+                            <option value="inline">Inline</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        `);
+    let dateInput = form.find(".countdown-date");
+    dateInput.on("change", function() {
+      let component = keditor.getSettingComponent();
+      component.find(".countdown-timer").attr("data-target-date", this.value);
+      self.startCountdown(component);
+    });
+    let styleSelect = form.find(".countdown-style");
+    styleSelect.on("change", function() {
+      let countdownEl = keditor.getSettingComponent().find(".countdown-timer");
+      countdownEl.removeClass("countdown-boxes countdown-inline");
+      countdownEl.addClass("countdown-" + this.value);
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let countdownEl = component.find(".countdown-timer");
+    let targetDate = countdownEl.attr("data-target-date") || "";
+    form.find(".countdown-date").val(targetDate);
+    if (countdownEl.hasClass("countdown-inline")) {
+      form.find(".countdown-style").val("inline");
+    } else {
+      form.find(".countdown-style").val("boxes");
+    }
+  }
+};
+KEditor$1.components["carousel"] = {
+  settingEnabled: true,
+  settingTitle: "Carousel Settings",
+  init: function(contentArea, container, component, keditor) {
+    if (typeof Swiper !== "undefined") {
+      let swiperEl = component.find(".swiper")[0];
+      if (swiperEl && !swiperEl.swiper) {
+        new Swiper(swiperEl, {
+          loop: true,
+          autoplay: {
+            delay: 5e3,
+            disableOnInteraction: false
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true
+          },
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev"
+          }
+        });
+      }
+    }
+  },
+  initSettingForm: function(form, keditor) {
+    form.append(`
+            <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Autoplay Delay (ms)</label>
+                    <div class="col-sm-12">
+                        <input type="number" class="form-control carousel-delay" min="1000" max="10000" step="500" value="5000" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Options</label>
+                    <div class="col-sm-12">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input carousel-loop" id="carousel-loop" checked />
+                            <label class="form-check-label" for="carousel-loop">Loop</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input carousel-autoplay" id="carousel-autoplay" checked />
+                            <label class="form-check-label" for="carousel-autoplay">Autoplay</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input carousel-pagination" id="carousel-pagination" checked />
+                            <label class="form-check-label" for="carousel-pagination">Show Pagination</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input carousel-navigation" id="carousel-navigation" checked />
+                            <label class="form-check-label" for="carousel-navigation">Show Navigation</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="col-sm-12">
+                        <button type="button" class="btn btn-sm btn-primary btn-add-slide w-100">+ Add Slide</button>
+                    </div>
+                </div>
+            </form>
+        `);
+    let self = this;
+    let updateSwiper = function() {
+      let component = keditor.getSettingComponent();
+      let swiperEl = component.find(".swiper")[0];
+      if (swiperEl && swiperEl.swiper) {
+        swiperEl.swiper.destroy();
+      }
+      self.init(null, null, component, keditor);
+    };
+    form.find(".carousel-delay").on("change", function() {
+      keditor.getSettingComponent().find(".swiper").attr("data-delay", this.value);
+      updateSwiper();
+    });
+    form.find(".carousel-pagination").on("change", function() {
+      keditor.getSettingComponent().find(".swiper-pagination").toggle(this.checked);
+    });
+    form.find(".carousel-navigation").on("change", function() {
+      let nav = keditor.getSettingComponent().find(".swiper-button-next, .swiper-button-prev");
+      nav.toggle(this.checked);
+    });
+    form.find(".btn-add-slide").on("click", function() {
+      let swiperWrapper = keditor.getSettingComponent().find(".swiper-wrapper");
+      swiperWrapper.append(`
+                <div class="swiper-slide">
+                    <div class="testimonial-slide text-center p-4">
+                        <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Avatar">
+                        <blockquote class="blockquote">
+                            <p>"New testimonial quote here."</p>
+                        </blockquote>
+                        <footer class="blockquote-footer">Author Name</footer>
+                    </div>
+                </div>
+            `);
+      updateSwiper();
+    });
+  },
+  showSettingForm: function(form, component, keditor) {
+    let swiperEl = component.find(".swiper");
+    let delay = swiperEl.attr("data-delay") || "5000";
+    form.find(".carousel-delay").val(delay);
+    form.find(".carousel-pagination").prop("checked", component.find(".swiper-pagination").is(":visible"));
+    form.find(".carousel-navigation").prop("checked", component.find(".swiper-button-next").is(":visible"));
+  }
+};
 //# sourceMappingURL=keditor.es.js.map
