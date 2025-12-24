@@ -2,7 +2,7 @@
     "name": "@kademi/keditor",
     "title": "KEditor",
     "libraryName": "KEditor",
-    "version": "3.0.0",
+    "version": "0.1.0",
     "type": "module",
     "description": "KEditor - Content editor with drag and drop",
     "author": "Kademi (http://kademi.co)",

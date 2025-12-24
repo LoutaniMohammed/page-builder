@@ -1,4 +1,4 @@
-/*! KEditor v3.0.0 | Copyright (c) 2016-present Kademi (http://kademi.co) */
+/*! KEditor v0.1.0 | Copyright (c) 2016-present Kademi (http://kademi.co) */
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
