@@ -49,7 +49,7 @@ KEditor.components['team'] = {
             teamRow.append(`
                 <div class="team-member ${colClass}">
                     <div class="card text-center shadow-sm">
-                        <img src="https://via.placeholder.com/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
+                        <img src="https://placehold.co/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
                         <div class="card-body">
                             <h5 class="card-title">Team Member</h5>
                             <p class="card-text text-muted">Role / Position</p>
@@ -75,3 +75,4 @@ KEditor.components['team'] = {
         }
     }
 };
+

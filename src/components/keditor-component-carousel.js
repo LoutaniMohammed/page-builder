@@ -97,7 +97,7 @@ KEditor.components['carousel'] = {
             swiperWrapper.append(`
                 <div class="swiper-slide">
                     <div class="testimonial-slide text-center p-4">
-                        <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Avatar">
+                        <img src="https://placehold.co/80" class="rounded-circle mb-3" alt="Avatar">
                         <blockquote class="blockquote">
                             <p>"New testimonial quote here."</p>
                         </blockquote>
@@ -118,3 +118,4 @@ KEditor.components['carousel'] = {
         form.find('.carousel-navigation').prop('checked', component.find('.swiper-button-next').is(':visible'));
     }
 };
+

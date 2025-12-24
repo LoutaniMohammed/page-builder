@@ -3822,7 +3822,7 @@ KEditor$1.components["team"] = {
       teamRow.append(`
                 <div class="team-member ${colClass}">
                     <div class="card text-center shadow-sm">
-                        <img src="https://via.placeholder.com/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
+                        <img src="https://placehold.co/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
                         <div class="card-body">
                             <h5 class="card-title">Team Member</h5>
                             <p class="card-text text-muted">Role / Position</p>
@@ -4027,7 +4027,7 @@ KEditor$1.components["carousel"] = {
       swiperWrapper.append(`
                 <div class="swiper-slide">
                     <div class="testimonial-slide text-center p-4">
-                        <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="Avatar">
+                        <img src="https://placehold.co/80" class="rounded-circle mb-3" alt="Avatar">
                         <blockquote class="blockquote">
                             <p>"New testimonial quote here."</p>
                         </blockquote>
