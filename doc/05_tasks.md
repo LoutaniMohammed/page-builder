@@ -1,31 +1,63 @@
-# KEditor Implementation Tasks
+# KEditor Component Enhancement Tasks
 
-## ✅ All Tasks Completed
+## Progress Bar
+- [ ] Edit label text (not just %)
+- [ ] Custom CSS class input
+- [ ] Height setting (default, thick, thin)
 
-### New Bootstrap 5 Components ✅
-- [x] Progress Bar (value, color, striped, animated)
-- [x] Alert Box (type variants, dismissible)
-- [x] List Group (styles, add items)
-- [x] Breadcrumbs (divider options)
-- [x] Pricing Table (dynamic tiers)
-- [x] Team Member Showcase (layout options)
-- [x] Countdown Timer (target date, live countdown)
-- [x] Testimonial Carousel (SwiperJS integration)
+## Alert Box
+- [ ] **Edit alert content** (title, message)
+- [ ] Icon selection
+- [ ] Custom CSS class input
+- [ ] Link button option
 
-### Previous Tasks ✅
-- [x] Vite Migration
-- [x] CKEditor 5 Update
-- [x] Bootstrap 5 Migration
-- [x] Responsive Grid
+## List Group
+- [ ] **Edit item text** (inline editing)
+- [ ] **Remove items** (delete button)
+- [ ] Item badges/counters
+- [ ] Item links (href)
+- [ ] Active/disabled states
+- [ ] Custom CSS class per item
+
+## Breadcrumbs
+- [ ] **Edit breadcrumb text** (inline editing)
+- [ ] **Remove breadcrumbs** (delete button)
+- [ ] Edit breadcrumb links (href)
+- [ ] Custom CSS class input
+
+## Pricing Table
+- [ ] **Edit tier name** (header text)
+- [ ] **Edit price** (amount, period)
+- [ ] **Edit features list** (add/remove/edit)
+- [ ] **Edit button text/link**
+- [ ] Featured/highlighted tier toggle
+- [ ] Custom CSS class per tier
+
+## Team Member Showcase
+- [ ] **Upload member photo**
+- [ ] **Edit name**
+- [ ] **Edit role/position**
+- [ ] **Edit social links** (add/remove/edit)
+- [ ] **Remove member** (delete button)
+- [ ] Custom CSS class per member
+
+## Countdown Timer
+- [ ] Edit box labels (days/hours/mins/secs text)
+- [ ] Color theme selection
+- [ ] Custom CSS class input
+- [ ] Expired message text
+
+## Testimonial Carousel (SwiperJS)
+- [ ] **Upload avatar image**
+- [ ] **Edit quote text**
+- [ ] **Edit author name**
+- [ ] **Edit author title**
+- [ ] **Remove slide** (delete button)
+- [ ] Slides per view setting
+- [ ] Custom CSS class input
 
 ---
 
-## Summary
-
-| Version | Changes |
-|---------|---------|
-| v0.1.0 | Vite + CKEditor 5 |
-| v0.2.0 | Bootstrap 5 |
-| v0.3.0 | 8 new components |
-
-**Build Size:** 89KB UMD, 166KB ES
+## Legend
+- **Bold** = High priority (content editing)
+- Regular = Medium priority (settings)
