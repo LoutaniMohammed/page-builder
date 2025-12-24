@@ -25,8 +25,8 @@ KEditor.components['video'] = {
     initSettingForm: function (form, keditor) {
         form.append(`
             <form class="form-horizontal">
-                <div class="form-group">
-                    <label for="video-input" class="col-sm-12">Video file</label>
+                <div class="mb-3">
+                    <label for="video-input" class="col-sm-12 form-label">Video file</label>
                     <div class="col-sm-12">
                         <div class="video-toolbar">
                             <a href="#" class="btn-video-input btn btn-sm btn-primary"><i class="fa fa-upload"></i></a>
@@ -34,35 +34,41 @@ KEditor.components['video'] = {
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-autoplay" class="col-sm-12">Autoplay</label>
+                <div class="mb-3">
+                    <label for="video-autoplay" class="col-sm-12 form-label">Autoplay</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-autoplay" />
+                        <input type="checkbox" class="video-autoplay form-check-input" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-loop" class="col-sm-12">Loop</label>
+                <div class="mb-3">
+                    <label for="video-loop" class="col-sm-12 form-label">Loop</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-loop" />
+                        <input type="checkbox" class="video-loop form-check-input" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-controls" class="col-sm-12">Show Controls</label>
+                <div class="mb-3">
+                    <label for="video-controls" class="col-sm-12 form-label">Show Controls</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-controls" checked />
+                        <input type="checkbox" class="video-controls form-check-input" checked />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="" class="col-sm-12">Ratio</label>
+                <div class="mb-3">
+                    <label for="" class="col-sm-12 form-label">Ratio</label>
                     <div class="col-sm-12">
-                        <input type="radio" name="video-radio" class="video-ratio" value="4/3" checked /> 4:3
+                        <div class="form-check">
+                            <input type="radio" name="video-radio" class="video-ratio form-check-input" value="4/3" checked />
+                            <label class="form-check-label">4:3</label>
+                        </div>
                     </div>
                     <div class="col-sm-12">
-                        <input type="radio" name="video-radio" class="video-ratio" value="16/9" /> 16:9
+                        <div class="form-check">
+                            <input type="radio" name="video-radio" class="video-ratio form-check-input" value="16/9" />
+                            <label class="form-check-label">16:9</label>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-width" class="col-sm-12">Width (px)</label>
+                <div class="mb-3">
+                    <label for="video-width" class="col-sm-12 form-label">Width (px)</label>
                     <div class="col-sm-12">
                         <input type="number" class="video-width form-control" min="320" max="1920" value="320" />
                     </div>

@@ -2981,7 +2981,7 @@ KEditor$1.components["googlemap"] = {
   settingTitle: "Google Map Settings",
   initSettingForm: function(form, keditor) {
     form.append(
-      '<form class="form-horizontal">   <div class="form-group">       <div class="col-sm-12">           <button type="button" class="btn btn-block btn-primary btn-googlemap-edit">Update Map</button>       </div>   </div>   <div class="form-group">       <label class="col-sm-12">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-default btn-googlemap-169">16:9</button>           <button type="button" class="btn btn-sm btn-default btn-googlemap-43">4:3</button>       </div>   </div></form>'
+      '<form class="form-horizontal">   <div class="mb-3">       <div class="col-sm-12">           <button type="button" class="btn w-100 btn-primary btn-googlemap-edit">Update Map</button>       </div>   </div>   <div class="mb-3">       <label class="col-sm-12 form-label">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-secondary btn-googlemap-169">16:9</button>           <button type="button" class="btn btn-sm btn-secondary btn-googlemap-43">4:3</button>       </div>   </div></form>'
     );
     let btnEdit = form.find(".btn-googlemap-edit");
     btnEdit.on("click", function(e) {
@@ -2990,7 +2990,7 @@ KEditor$1.components["googlemap"] = {
       let iframe = $$1(inputData);
       let src = iframe.attr("src");
       if (iframe.length > 0 && src && src.length > 0) {
-        keditor.getSettingComponent().find(".embed-responsive-item").attr("src", src);
+        keditor.getSettingComponent().find("iframe").attr("src", src);
       } else {
         alert("Your Google Map embed code is invalid!");
       }
@@ -2998,12 +2998,12 @@ KEditor$1.components["googlemap"] = {
     let btn169 = form.find(".btn-googlemap-169");
     btn169.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-4by3").addClass("embed-responsive-16by9");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-4x3").addClass("ratio-16x9");
     });
     let btn43 = form.find(".btn-googlemap-43");
     btn43.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-16by9").addClass("embed-responsive-4by3");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-16x9").addClass("ratio-4x3");
     });
   }
 };
@@ -3019,7 +3019,7 @@ KEditor$1.components["photo"] = {
     let self = this;
     keditor.options;
     form.append(
-      '<form class="form-horizontal">   <div class="form-group">       <div class="col-sm-12">           <button type="button" class="btn btn-block btn-primary" id="photo-edit">Change Photo</button>           <input type="file" style="display: none" />       </div>   </div>   <div class="form-group">       <label for="photo-align" class="col-sm-12">Align</label>       <div class="col-sm-12">           <select id="photo-align" class="form-control">               <option value="left">Left</option>               <option value="center">Center</option>               <option value="right">Right</option>           </select>       </div>   </div>   <div class="form-group">       <label for="photo-style" class="col-sm-12">Style</label>       <div class="col-sm-12">           <select id="photo-style" class="form-control">               <option value="">None</option>               <option value="img-rounded">Rounded</option>               <option value="img-circle">Circle</option>               <option value="img-thumbnail">Thumbnail</option>           </select>       </div>   </div>   <div class="form-group">       <label for="photo-responsive" class="col-sm-12">Responsive</label>       <div class="col-sm-12">           <input type="checkbox" id="photo-responsive" />       </div>   </div>   <div class="form-group">       <label for="photo-width" class="col-sm-12">Width</label>       <div class="col-sm-12">           <input type="number" id="photo-width" class="form-control" />       </div>   </div>   <div class="form-group">       <label for="photo-height" class="col-sm-12">Height</label>       <div class="col-sm-12">           <input type="number" id="photo-height" class="form-control" />       </div>   </div></form>'
+      '<form class="form-horizontal">   <div class="mb-3">       <div class="col-sm-12">           <button type="button" class="btn w-100 btn-primary" id="photo-edit">Change Photo</button>           <input type="file" style="display: none" />       </div>   </div>   <div class="mb-3">       <label for="photo-align" class="col-sm-12 form-label">Align</label>       <div class="col-sm-12">           <select id="photo-align" class="form-select">               <option value="left">Left</option>               <option value="center">Center</option>               <option value="right">Right</option>           </select>       </div>   </div>   <div class="mb-3">       <label for="photo-style" class="col-sm-12 form-label">Style</label>       <div class="col-sm-12">           <select id="photo-style" class="form-select">               <option value="">None</option>               <option value="rounded">Rounded</option>               <option value="rounded-circle">Circle</option>               <option value="img-thumbnail">Thumbnail</option>           </select>       </div>   </div>   <div class="mb-3">       <label for="photo-responsive" class="col-sm-12 form-label">Responsive</label>       <div class="col-sm-12">           <input type="checkbox" class="form-check-input" id="photo-responsive" />       </div>   </div>   <div class="mb-3">       <label for="photo-width" class="col-sm-12 form-label">Width</label>       <div class="col-sm-12">           <input type="number" id="photo-width" class="form-control" />       </div>   </div>   <div class="mb-3">       <label for="photo-height" class="col-sm-12 form-label">Height</label>       <div class="col-sm-12">           <input type="number" id="photo-height" class="form-control" />       </div>   </div></form>'
     );
     let photoEdit = form.find("#photo-edit");
     let fileInput = photoEdit.next();
@@ -3054,13 +3054,13 @@ KEditor$1.components["photo"] = {
     });
     let inputResponsive = form.find("#photo-responsive");
     inputResponsive.on("click", function() {
-      keditor.getSettingComponent().find("img")[this.checked ? "addClass" : "removeClass"]("img-responsive");
+      keditor.getSettingComponent().find("img")[this.checked ? "addClass" : "removeClass"]("img-fluid");
     });
     let cbbStyle = form.find("#photo-style");
     cbbStyle.on("change", function() {
       let img = keditor.getSettingComponent().find("img");
       let val = this.value;
-      img.removeClass("img-rounded img-circle img-thumbnail");
+      img.removeClass("rounded rounded-circle img-thumbnail");
       if (val) {
         img.addClass(val);
       }
@@ -3111,17 +3111,17 @@ KEditor$1.components["photo"] = {
     if (algin !== "right" || algin !== "center") {
       algin = "left";
     }
-    if (img.hasClass("img-rounded")) {
-      cbbStyle.val("img-rounded");
-    } else if (img.hasClass("img-circle")) {
-      cbbStyle.val("img-circle");
+    if (img.hasClass("rounded")) {
+      cbbStyle.val("rounded");
+    } else if (img.hasClass("rounded-circle")) {
+      cbbStyle.val("rounded-circle");
     } else if (img.hasClass("img-thumbnail")) {
       cbbStyle.val("img-thumbnail");
     } else {
       cbbStyle.val("");
     }
     inputAlign.val(algin);
-    inputResponsive.prop("checked", img.hasClass("img-responsive"));
+    inputResponsive.prop("checked", img.hasClass("img-fluid"));
     inputWidth.val(img.width());
     inputHeight.val(img.height());
     $$1("<img />").attr("src", img.attr("src")).load(function() {
@@ -3245,8 +3245,8 @@ KEditor$1.components["video"] = {
   initSettingForm: function(form, keditor) {
     form.append(`
             <form class="form-horizontal">
-                <div class="form-group">
-                    <label for="video-input" class="col-sm-12">Video file</label>
+                <div class="mb-3">
+                    <label for="video-input" class="col-sm-12 form-label">Video file</label>
                     <div class="col-sm-12">
                         <div class="video-toolbar">
                             <a href="#" class="btn-video-input btn btn-sm btn-primary"><i class="fa fa-upload"></i></a>
@@ -3254,35 +3254,41 @@ KEditor$1.components["video"] = {
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-autoplay" class="col-sm-12">Autoplay</label>
+                <div class="mb-3">
+                    <label for="video-autoplay" class="col-sm-12 form-label">Autoplay</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-autoplay" />
+                        <input type="checkbox" class="video-autoplay form-check-input" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-loop" class="col-sm-12">Loop</label>
+                <div class="mb-3">
+                    <label for="video-loop" class="col-sm-12 form-label">Loop</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-loop" />
+                        <input type="checkbox" class="video-loop form-check-input" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-controls" class="col-sm-12">Show Controls</label>
+                <div class="mb-3">
+                    <label for="video-controls" class="col-sm-12 form-label">Show Controls</label>
                     <div class="col-sm-12">
-                        <input type="checkbox" class="video-controls" checked />
+                        <input type="checkbox" class="video-controls form-check-input" checked />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="" class="col-sm-12">Ratio</label>
+                <div class="mb-3">
+                    <label for="" class="col-sm-12 form-label">Ratio</label>
                     <div class="col-sm-12">
-                        <input type="radio" name="video-radio" class="video-ratio" value="4/3" checked /> 4:3
+                        <div class="form-check">
+                            <input type="radio" name="video-radio" class="video-ratio form-check-input" value="4/3" checked />
+                            <label class="form-check-label">4:3</label>
+                        </div>
                     </div>
                     <div class="col-sm-12">
-                        <input type="radio" name="video-radio" class="video-ratio" value="16/9" /> 16:9
+                        <div class="form-check">
+                            <input type="radio" name="video-radio" class="video-ratio form-check-input" value="16/9" />
+                            <label class="form-check-label">16:9</label>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="video-width" class="col-sm-12">Width (px)</label>
+                <div class="mb-3">
+                    <label for="video-width" class="col-sm-12 form-label">Width (px)</label>
                     <div class="col-sm-12">
                         <input type="number" class="video-width form-control" min="320" max="1920" value="320" />
                     </div>
@@ -3357,7 +3363,7 @@ KEditor$1.components["vimeo"] = {
   settingTitle: "Vimeo Settings",
   initSettingForm: function(form, keditor) {
     form.append(
-      '<form class="form-horizontal">   <div class="form-group">       <div class="col-sm-12">           <button type="button" class="btn btn-block btn-primary btn-vimeo-edit">Change Video</button>       </div>   </div>   <div class="form-group">       <label class="col-sm-12">Autoplay</label>       <div class="col-sm-12">           <input type="checkbox" id="vimeo-autoplay" />       </div>   </div>   <div class="form-group">       <label class="col-sm-12">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-default btn-vimeo-169">16:9</button>           <button type="button" class="btn btn-sm btn-default btn-vimeo-43">4:3</button>       </div>   </div></form>'
+      '<form class="form-horizontal">   <div class="mb-3">       <div class="col-sm-12">           <button type="button" class="btn w-100 btn-primary btn-vimeo-edit">Change Video</button>       </div>   </div>   <div class="mb-3">       <label class="col-sm-12 form-label">Autoplay</label>       <div class="col-sm-12">           <input type="checkbox" class="form-check-input" id="vimeo-autoplay" />       </div>   </div>   <div class="mb-3">       <label class="col-sm-12 form-label">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-secondary btn-vimeo-169">16:9</button>           <button type="button" class="btn btn-sm btn-secondary btn-vimeo-43">4:3</button>       </div>   </div></form>'
     );
     let btnEdit = form.find(".btn-vimeo-edit");
     btnEdit.on("click", function(e) {
@@ -3365,8 +3371,8 @@ KEditor$1.components["vimeo"] = {
       let inputData = prompt("Please enter Vimeo URL in here:");
       let vimeoRegex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
       let match = inputData.match(vimeoRegex);
-      if (match && match[1]) {
-        keditor.getSettingComponent().find(".embed-responsive-item").attr("src", "https://player.vimeo.com/video/" + match[1] + "?byline=0&portrait=0&badge=0");
+      if (match && match[3]) {
+        keditor.getSettingComponent().find("iframe").attr("src", "https://player.vimeo.com/video/" + match[3] + "?byline=0&portrait=0&badge=0");
       } else {
         alert("Your Vimeo URL is invalid!");
       }
@@ -3374,23 +3380,23 @@ KEditor$1.components["vimeo"] = {
     let btn169 = form.find(".btn-vimeo-169");
     btn169.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-4by3").addClass("embed-responsive-16by9");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-4x3").addClass("ratio-16x9");
     });
     let btn43 = form.find(".btn-vimeo-43");
     btn43.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-16by9").addClass("embed-responsive-4by3");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-16x9").addClass("ratio-4x3");
     });
     let chkAutoplay = form.find("#vimeo-autoplay");
     chkAutoplay.on("click", function() {
-      let embedItem = keditor.getSettingComponent().find(".embed-responsive-item");
+      let embedItem = keditor.getSettingComponent().find("iframe");
       let currentUrl = embedItem.attr("src");
       let newUrl = currentUrl.replace(/(\?.+)+/, "") + "?byline=0&portrait=0&badge=0&autoplay=" + (chkAutoplay.is(":checked") ? 1 : 0);
       embedItem.attr("src", newUrl);
     });
   },
   showSettingForm: function(form, component, keditor) {
-    let embedItem = component.find(".embed-responsive-item");
+    let embedItem = component.find("iframe");
     let chkAutoplay = form.find("#vimeo-autoplay");
     let src = embedItem.attr("src");
     chkAutoplay.prop("checked", src.indexOf("autoplay=1") !== -1);
@@ -3406,16 +3412,16 @@ KEditor$1.components["youtube"] = {
   settingTitle: "Youtube Settings",
   initSettingForm: function(form, keditor) {
     form.append(
-      '<form class="form-horizontal">   <div class="form-group">       <div class="col-sm-12">           <button type="button" class="btn btn-block btn-primary btn-youtube-edit">Change Video</button>       </div>   </div>   <div class="form-group">       <label class="col-sm-12">Autoplay</label>       <div class="col-sm-12">           <input type="checkbox" id="youtube-autoplay" />       </div>   </div>   <div class="form-group">       <label class="col-sm-12">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-default btn-youtube-169">16:9</button>           <button type="button" class="btn btn-sm btn-default btn-youtube-43">4:3</button>       </div>   </div></form>'
+      '<form class="form-horizontal">   <div class="mb-3">       <div class="col-sm-12">           <button type="button" class="btn w-100 btn-primary btn-youtube-edit">Change Video</button>       </div>   </div>   <div class="mb-3">       <label class="col-sm-12 form-label">Autoplay</label>       <div class="col-sm-12">           <input type="checkbox" class="form-check-input" id="youtube-autoplay" />       </div>   </div>   <div class="mb-3">       <label class="col-sm-12 form-label">Aspect Ratio</label>       <div class="col-sm-12">           <button type="button" class="btn btn-sm btn-secondary btn-youtube-169">16:9</button>           <button type="button" class="btn btn-sm btn-secondary btn-youtube-43">4:3</button>       </div>   </div></form>'
     );
     let btnEdit = form.find(".btn-youtube-edit");
     btnEdit.on("click", function(e) {
       e.preventDefault();
       let inputData = prompt("Please enter Youtube URL in here:");
-      let youtubeRegex = /^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/;
+      let youtubeRegex = /^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'><]+)/;
       let match = inputData.match(youtubeRegex);
       if (match && match[1]) {
-        keditor.getSettingComponent().find(".embed-responsive-item").attr("src", "https://www.youtube.com/embed/" + match[1]);
+        keditor.getSettingComponent().find("iframe").attr("src", "https://www.youtube.com/embed/" + match[1]);
       } else {
         alert("Your Youtube URL is invalid!");
       }
@@ -3423,23 +3429,23 @@ KEditor$1.components["youtube"] = {
     let btn169 = form.find(".btn-youtube-169");
     btn169.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-4by3").addClass("embed-responsive-16by9");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-4x3").addClass("ratio-16x9");
     });
     let btn43 = form.find(".btn-youtube-43");
     btn43.on("click", function(e) {
       e.preventDefault();
-      keditor.getSettingComponent().find(".embed-responsive").removeClass("embed-responsive-16by9").addClass("embed-responsive-4by3");
+      keditor.getSettingComponent().find(".ratio").removeClass("ratio-16x9").addClass("ratio-4x3");
     });
     let chkAutoplay = form.find("#youtube-autoplay");
     chkAutoplay.on("click", function() {
-      let embedItem = keditor.getSettingComponent().find(".embed-responsive-item");
+      let embedItem = keditor.getSettingComponent().find("iframe");
       let currentUrl = embedItem.attr("src");
       let newUrl = currentUrl.replace(/(\?.+)+/, "") + "?autoplay=" + (chkAutoplay.is(":checked") ? 1 : 0);
       embedItem.attr("src", newUrl);
     });
   },
   showSettingForm: function(form, component, keditor) {
-    let embedItem = component.find(".embed-responsive-item");
+    let embedItem = component.find("iframe");
     let chkAutoplay = form.find("#youtube-autoplay");
     let src = embedItem.attr("src");
     chkAutoplay.prop("checked", src.indexOf("autoplay=1") !== -1);

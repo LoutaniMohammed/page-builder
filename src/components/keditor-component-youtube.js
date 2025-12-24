@@ -14,22 +14,22 @@ KEditor.components['youtube'] = {
     initSettingForm: function (form, keditor) {
         form.append(
             '<form class="form-horizontal">' +
-            '   <div class="form-group">' +
+            '   <div class="mb-3">' +
             '       <div class="col-sm-12">' +
-            '           <button type="button" class="btn btn-block btn-primary btn-youtube-edit">Change Video</button>' +
+            '           <button type="button" class="btn w-100 btn-primary btn-youtube-edit">Change Video</button>' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label class="col-sm-12">Autoplay</label>' +
+            '   <div class="mb-3">' +
+            '       <label class="col-sm-12 form-label">Autoplay</label>' +
             '       <div class="col-sm-12">' +
-            '           <input type="checkbox" id="youtube-autoplay" />' +
+            '           <input type="checkbox" class="form-check-input" id="youtube-autoplay" />' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label class="col-sm-12">Aspect Ratio</label>' +
+            '   <div class="mb-3">' +
+            '       <label class="col-sm-12 form-label">Aspect Ratio</label>' +
             '       <div class="col-sm-12">' +
-            '           <button type="button" class="btn btn-sm btn-default btn-youtube-169">16:9</button>' +
-            '           <button type="button" class="btn btn-sm btn-default btn-youtube-43">4:3</button>' +
+            '           <button type="button" class="btn btn-sm btn-secondary btn-youtube-169">16:9</button>' +
+            '           <button type="button" class="btn btn-sm btn-secondary btn-youtube-43">4:3</button>' +
             '       </div>' +
             '   </div>' +
             '</form>'
@@ -40,10 +40,10 @@ KEditor.components['youtube'] = {
             e.preventDefault();
             
             let inputData = prompt('Please enter Youtube URL in here:');
-            let youtubeRegex = /^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/;
+            let youtubeRegex = /^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'><]+)/;
             let match = inputData.match(youtubeRegex);
             if (match && match[1]) {
-                keditor.getSettingComponent().find('.embed-responsive-item').attr('src', 'https://www.youtube.com/embed/' + match[1]);
+                keditor.getSettingComponent().find('iframe').attr('src', 'https://www.youtube.com/embed/' + match[1]);
             } else {
                 alert('Your Youtube URL is invalid!');
             }
@@ -53,19 +53,19 @@ KEditor.components['youtube'] = {
         btn169.on('click', function (e) {
             e.preventDefault();
             
-            keditor.getSettingComponent().find('.embed-responsive').removeClass('embed-responsive-4by3').addClass('embed-responsive-16by9');
+            keditor.getSettingComponent().find('.ratio').removeClass('ratio-4x3').addClass('ratio-16x9');
         });
         
         let btn43 = form.find('.btn-youtube-43');
         btn43.on('click', function (e) {
             e.preventDefault();
             
-            keditor.getSettingComponent().find('.embed-responsive').removeClass('embed-responsive-16by9').addClass('embed-responsive-4by3');
+            keditor.getSettingComponent().find('.ratio').removeClass('ratio-16x9').addClass('ratio-4x3');
         });
         
         let chkAutoplay = form.find('#youtube-autoplay');
         chkAutoplay.on('click', function () {
-            let embedItem = keditor.getSettingComponent().find('.embed-responsive-item');
+            let embedItem = keditor.getSettingComponent().find('iframe');
             let currentUrl = embedItem.attr('src');
             let newUrl = (currentUrl.replace(/(\?.+)+/, '')) + '?autoplay=' + (chkAutoplay.is(':checked') ? 1 : 0);
             embedItem.attr('src', newUrl);
@@ -73,7 +73,7 @@ KEditor.components['youtube'] = {
     },
     
     showSettingForm: function (form, component, keditor) {
-        let embedItem = component.find('.embed-responsive-item');
+        let embedItem = component.find('iframe');
         let chkAutoplay = form.find('#youtube-autoplay');
         let src = embedItem.attr('src');
         

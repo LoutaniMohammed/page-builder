@@ -19,47 +19,47 @@ KEditor.components['photo'] = {
         
         form.append(
             '<form class="form-horizontal">' +
-            '   <div class="form-group">' +
+            '   <div class="mb-3">' +
             '       <div class="col-sm-12">' +
-            '           <button type="button" class="btn btn-block btn-primary" id="photo-edit">Change Photo</button>' +
+            '           <button type="button" class="btn w-100 btn-primary" id="photo-edit">Change Photo</button>' +
             '           <input type="file" style="display: none" />' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label for="photo-align" class="col-sm-12">Align</label>' +
+            '   <div class="mb-3">' +
+            '       <label for="photo-align" class="col-sm-12 form-label">Align</label>' +
             '       <div class="col-sm-12">' +
-            '           <select id="photo-align" class="form-control">' +
+            '           <select id="photo-align" class="form-select">' +
             '               <option value="left">Left</option>' +
             '               <option value="center">Center</option>' +
             '               <option value="right">Right</option>' +
             '           </select>' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label for="photo-style" class="col-sm-12">Style</label>' +
+            '   <div class="mb-3">' +
+            '       <label for="photo-style" class="col-sm-12 form-label">Style</label>' +
             '       <div class="col-sm-12">' +
-            '           <select id="photo-style" class="form-control">' +
+            '           <select id="photo-style" class="form-select">' +
             '               <option value="">None</option>' +
-            '               <option value="img-rounded">Rounded</option>' +
-            '               <option value="img-circle">Circle</option>' +
+            '               <option value="rounded">Rounded</option>' +
+            '               <option value="rounded-circle">Circle</option>' +
             '               <option value="img-thumbnail">Thumbnail</option>' +
             '           </select>' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label for="photo-responsive" class="col-sm-12">Responsive</label>' +
+            '   <div class="mb-3">' +
+            '       <label for="photo-responsive" class="col-sm-12 form-label">Responsive</label>' +
             '       <div class="col-sm-12">' +
-            '           <input type="checkbox" id="photo-responsive" />' +
+            '           <input type="checkbox" class="form-check-input" id="photo-responsive" />' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label for="photo-width" class="col-sm-12">Width</label>' +
+            '   <div class="mb-3">' +
+            '       <label for="photo-width" class="col-sm-12 form-label">Width</label>' +
             '       <div class="col-sm-12">' +
             '           <input type="number" id="photo-width" class="form-control" />' +
             '       </div>' +
             '   </div>' +
-            '   <div class="form-group">' +
-            '       <label for="photo-height" class="col-sm-12">Height</label>' +
+            '   <div class="mb-3">' +
+            '       <label for="photo-height" class="col-sm-12 form-label">Height</label>' +
             '       <div class="col-sm-12">' +
             '           <input type="number" id="photo-height" class="form-control" />' +
             '       </div>' +
@@ -105,7 +105,7 @@ KEditor.components['photo'] = {
         
         let inputResponsive = form.find('#photo-responsive');
         inputResponsive.on('click', function () {
-            keditor.getSettingComponent().find('img')[this.checked ? 'addClass' : 'removeClass']('img-responsive');
+            keditor.getSettingComponent().find('img')[this.checked ? 'addClass' : 'removeClass']('img-fluid');
         });
         
         let cbbStyle = form.find('#photo-style');
@@ -113,7 +113,7 @@ KEditor.components['photo'] = {
             let img = keditor.getSettingComponent().find('img');
             let val = this.value;
             
-            img.removeClass('img-rounded img-circle img-thumbnail');
+            img.removeClass('rounded rounded-circle img-thumbnail');
             if (val) {
                 img.addClass(val);
             }
@@ -173,10 +173,10 @@ KEditor.components['photo'] = {
             algin = 'left';
         }
         
-        if (img.hasClass('img-rounded')) {
-            cbbStyle.val('img-rounded');
-        } else if (img.hasClass('img-circle')) {
-            cbbStyle.val('img-circle');
+        if (img.hasClass('rounded')) {
+            cbbStyle.val('rounded');
+        } else if (img.hasClass('rounded-circle')) {
+            cbbStyle.val('rounded-circle');
         } else if (img.hasClass('img-thumbnail')) {
             cbbStyle.val('img-thumbnail');
         } else {
@@ -184,7 +184,7 @@ KEditor.components['photo'] = {
         }
         
         inputAlign.val(algin);
-        inputResponsive.prop('checked', img.hasClass('img-responsive'));
+        inputResponsive.prop('checked', img.hasClass('img-fluid'));
         inputWidth.val(img.width());
         inputHeight.val(img.height());
         
