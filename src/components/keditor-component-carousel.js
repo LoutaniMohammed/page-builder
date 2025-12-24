@@ -14,21 +14,28 @@ KEditor.components['carousel'] = {
             let swiperEl = component.find('.swiper')[0];
             if (swiperEl) {
                 if (swiperEl.swiper) {
-                    swiperEl.swiper.destroy();
+                    swiperEl.swiper.destroy(true, true);
                 }
+                // Get the specific pagination and navigation elements within this component
+                let paginationEl = component.find('.swiper-pagination')[0];
+                let prevEl = component.find('.swiper-button-prev')[0];
+                let nextEl = component.find('.swiper-button-next')[0];
+                
                 new Swiper(swiperEl, {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
                     loop: true,
                     autoplay: {
-                        delay: parseInt(component.find('.swiper').attr('data-delay') || 5000),
+                        delay: parseInt($(swiperEl).attr('data-delay') || 5000),
                         disableOnInteraction: false,
                     },
                     pagination: {
-                        el: '.swiper-pagination',
+                        el: paginationEl,
                         clickable: true,
                     },
                     navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
+                        nextEl: nextEl,
+                        prevEl: prevEl,
                     },
                 });
             }
