@@ -17,8 +17,13 @@ KEditor.components['countdown'] = {
             // Default: 7 days from now
             let future = new Date();
             future.setDate(future.getDate() + 7);
-            targetDate = future.toISOString().split('T')[0];
+            targetDate = future.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:mm
             countdownEl.attr('data-target-date', targetDate);
+        }
+        
+        // Clear any existing interval
+        if (countdownEl.data('interval')) {
+            clearInterval(countdownEl.data('interval'));
         }
         
         let updateCountdown = function () {
@@ -46,18 +51,23 @@ KEditor.components['countdown'] = {
         };
         
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        let interval = setInterval(updateCountdown, 1000);
+        countdownEl.data('interval', interval);
     },
     
     initSettingForm: function (form, keditor) {
         let self = this;
         
+        // Get today's date/time as minimum
+        let now = new Date();
+        let minDateTime = now.toISOString().slice(0, 16);
+        
         form.append(`
             <form class="form-horizontal">
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Target Date</label>
+                    <label class="col-sm-12 form-label">Target Date & Time</label>
                     <div class="col-sm-12">
-                        <input type="date" class="form-control countdown-date" />
+                        <input type="datetime-local" class="form-control countdown-date" min="${minDateTime}" />
                     </div>
                 </div>
                 <div class="mb-3">

@@ -3859,8 +3859,11 @@ KEditor$1.components["countdown"] = {
     if (!targetDate) {
       let future = /* @__PURE__ */ new Date();
       future.setDate(future.getDate() + 7);
-      targetDate = future.toISOString().split("T")[0];
+      targetDate = future.toISOString().slice(0, 16);
       countdownEl.attr("data-target-date", targetDate);
+    }
+    if (countdownEl.data("interval")) {
+      clearInterval(countdownEl.data("interval"));
     }
     let updateCountdown = function() {
       let now = (/* @__PURE__ */ new Date()).getTime();
@@ -3883,16 +3886,19 @@ KEditor$1.components["countdown"] = {
       countdownEl.find(".countdown-seconds").text(seconds.toString().padStart(2, "0"));
     };
     updateCountdown();
-    setInterval(updateCountdown, 1e3);
+    let interval = setInterval(updateCountdown, 1e3);
+    countdownEl.data("interval", interval);
   },
   initSettingForm: function(form, keditor) {
     let self = this;
+    let now = /* @__PURE__ */ new Date();
+    let minDateTime = now.toISOString().slice(0, 16);
     form.append(`
             <form class="form-horizontal">
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Target Date</label>
+                    <label class="col-sm-12 form-label">Target Date & Time</label>
                     <div class="col-sm-12">
-                        <input type="date" class="form-control countdown-date" />
+                        <input type="datetime-local" class="form-control countdown-date" min="${minDateTime}" />
                     </div>
                 </div>
                 <div class="mb-3">
