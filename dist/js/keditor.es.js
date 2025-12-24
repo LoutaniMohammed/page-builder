@@ -2527,7 +2527,6 @@ function setContent(content, contentArea) {
 if (!$$1.fn.sortable) {
   throw new Error("[ KEditor ] $.fn.sortable does not exist. Please import $.fn.sortable into your document for continue using KEditor.");
 }
-window.KEDITOR_DEBUG = true;
 let KEditor$1 = (_a = class {
   constructor(target, config) {
     __publicField(this, "settingComponent", null);

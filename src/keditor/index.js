@@ -21,9 +21,6 @@ import initDynamicContent from './component/initDynamicContent';
 if (!$.fn.sortable) {
     throw new Error('[ KEditor ] $.fn.sortable does not exist. Please import $.fn.sortable into your document for continue using KEditor.');
 }
-
-window.KEDITOR_DEBUG = true;
-
 // KEditor class
 class KEditor {
     static DEFAULTS = DEFAULTS;
