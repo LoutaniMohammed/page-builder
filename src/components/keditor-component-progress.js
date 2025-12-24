@@ -52,10 +52,12 @@ KEditor.components['progress'] = {
         valueInput.on('input', function () {
             let value = this.value;
             valueDisplay.text(value + '%');
-            let progressBar = keditor.getSettingComponent().find('.progress-bar');
+            let component = keditor.getSettingComponent();
+            let progressBar = component.find('.progress-bar');
+            let progressLabel = component.find('.progress-label');
             progressBar.css('width', value + '%').attr('aria-valuenow', value);
-            if (progressBar.parent().find('.progress-label').length) {
-                progressBar.parent().find('.progress-label').text(value + '%');
+            if (progressLabel.length) {
+                progressLabel.text(value + '%');
             }
         });
         
