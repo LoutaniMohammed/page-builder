@@ -40,11 +40,10 @@ export default defineConfig({
         outDir: 'dist',
         emptyOutDir: true,
         rollupOptions: {
-            external: ['jquery', 'ckeditor'],
+            external: ['jquery'],
             output: {
                 globals: {
-                    jquery: 'jQuery',
-                    ckeditor: 'CKEDITOR'
+                    jquery: 'jQuery'
                 },
                 assetFileNames: (assetInfo) => {
                     if (assetInfo.name?.endsWith('.css')) {

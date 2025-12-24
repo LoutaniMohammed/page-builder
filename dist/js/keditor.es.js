@@ -4,7 +4,6 @@ var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { en
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
 var _a;
 import $$1 from "jquery";
-import CKEDITOR from "ckeditor";
 const CSS_CLASS = {
   UI: "keditor-ui",
   UI_DRAGGING: "keditor-ui-dragging",
@@ -3132,80 +3131,83 @@ KEditor$1.components["photo"] = {
     });
   }
 };
-CKEDITOR.disableAutoInline = true;
-CKEDITOR.dom.element.prototype.scrollIntoView = () => {
-  return;
-};
-CKEDITOR.dom.selection.prototype.scrollIntoView = () => {
-  return;
-};
-CKEDITOR.dom.range.prototype.scrollIntoView = () => {
-  return;
-};
 KEditor$1.components["text"] = {
-  options: {
-    toolbarGroups: [
-      { name: "document", groups: ["mode", "document", "doctools"] },
-      { name: "editing", groups: ["find", "selection", "spellchecker", "editing"] },
-      { name: "forms", groups: ["forms"] },
-      { name: "basicstyles", groups: ["basicstyles", "cleanup"] },
-      { name: "paragraph", groups: ["list", "indent", "blocks", "align", "bidi", "paragraph"] },
-      { name: "links", groups: ["links"] },
-      { name: "insert", groups: ["insert"] },
-      "/",
-      { name: "clipboard", groups: ["clipboard", "undo"] },
-      { name: "styles", groups: ["styles"] },
-      { name: "colors", groups: ["colors"] }
-    ],
-    title: false,
-    allowedContent: true,
-    // DISABLES Advanced Content Filter. This is so templates with classes: allowed through
-    bodyId: "editor",
-    templates_replaceContent: false,
-    enterMode: "P",
-    forceEnterMode: true,
-    format_tags: "p;h1;h2;h3;h4;h5;h6",
-    removePlugins: "table,magicline,tableselection,tabletools",
-    removeButtons: "Save,NewPage,Preview,Print,Templates,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Outdent,Indent,Blockquote,CreateDiv,Language,Table,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Styles,BGColor,Maximize,About,ShowBlocks,BidiLtr,BidiRtl,Flash,Image,Subscript,Superscript,Anchor",
-    minimumChangeMilliseconds: 100
-  },
+  // Store editor instances by element ID
+  editors: {},
   init: function(contentArea, container, component, keditor) {
     let self = this;
     let options = keditor.options;
     let componentContent = component.children(".keditor-component-content");
-    componentContent.prop("contenteditable", true);
-    componentContent.on("input", function(e) {
-      if (typeof options.onComponentChanged === "function") {
-        options.onComponentChanged.call(keditor, e, component);
+    let elementId = componentContent.attr("id");
+    if (typeof window.InlineEditor === "undefined") {
+      console.error("[ KEditor ] CKEditor 5 InlineEditor is not loaded. Please include CKEditor 5 script.");
+      componentContent.prop("contenteditable", true);
+      return;
+    }
+    window.InlineEditor.create(componentContent[0], {
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "underline",
+          "strikethrough",
+          "|",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "alignment",
+          "|",
+          "fontColor",
+          "fontBackgroundColor",
+          "|",
+          "undo",
+          "redo"
+        ],
+        shouldNotGroupWhenFull: true
+      },
+      heading: {
+        options: [
+          { model: "paragraph", title: "Paragraph", class: "ck-heading_paragraph" },
+          { model: "heading1", view: "h1", title: "Heading 1", class: "ck-heading_heading1" },
+          { model: "heading2", view: "h2", title: "Heading 2", class: "ck-heading_heading2" },
+          { model: "heading3", view: "h3", title: "Heading 3", class: "ck-heading_heading3" },
+          { model: "heading4", view: "h4", title: "Heading 4", class: "ck-heading_heading4" },
+          { model: "heading5", view: "h5", title: "Heading 5", class: "ck-heading_heading5" },
+          { model: "heading6", view: "h6", title: "Heading 6", class: "ck-heading_heading6" }
+        ]
+      },
+      link: {
+        addTargetToExternalLinks: true
       }
-      if (typeof options.onContainerChanged === "function") {
-        options.onContainerChanged.call(keditor, e, container, contentArea);
-      }
-      if (typeof options.onContentChanged === "function") {
-        options.onContentChanged.call(keditor, e, contentArea);
-      }
-    });
-    let editor = CKEDITOR.inline(componentContent[0], self.options);
-    editor.on("instanceReady", function() {
-      $("#cke_" + componentContent.attr("id")).appendTo(keditor.wrapper);
+    }).then((editor) => {
+      self.editors[elementId] = editor;
+      editor.model.document.on("change:data", () => {
+        if (typeof options.onComponentChanged === "function") {
+          options.onComponentChanged.call(keditor, null, component);
+        }
+        if (typeof options.onContainerChanged === "function") {
+          options.onContainerChanged.call(keditor, null, container, contentArea);
+        }
+        if (typeof options.onContentChanged === "function") {
+          options.onContentChanged.call(keditor, null, contentArea);
+        }
+      });
       if (typeof options.onComponentReady === "function") {
         options.onComponentReady.call(contentArea, component, editor);
       }
+    }).catch((error2) => {
+      console.error("[ KEditor ] CKEditor 5 initialization error:", error2);
+      componentContent.prop("contenteditable", true);
     });
-    editor.on("key", function(event) {
-      const isCtrl = event.data.domEvent.$.ctrlKey;
-      if (isCtrl && event.data.domEvent.$.keyCode === 86 || event.data.domEvent.$.keyCode === 13) {
-        console.log("Dont scroll!!");
-        keditor.iframeBody.scrollTop($(editor.element.$).offset().top);
-        setTimeout(() => {
-        }, 10);
-      }
-    }, editor);
   },
   getContent: function(component, keditor) {
     let componentContent = component.find(".keditor-component-content");
     let id = componentContent.attr("id");
-    let editor = CKEDITOR.instances[id];
+    let editor = this.editors[id];
     if (editor) {
       return editor.getData();
     } else {
@@ -3214,7 +3216,14 @@ KEditor$1.components["text"] = {
   },
   destroy: function(component, keditor) {
     let id = component.find(".keditor-component-content").attr("id");
-    CKEDITOR.instances[id] && CKEDITOR.instances[id].destroy();
+    let editor = this.editors[id];
+    if (editor) {
+      editor.destroy().then(() => {
+        delete this.editors[id];
+      }).catch((error2) => {
+        console.error("[ KEditor ] Error destroying CKEditor 5:", error2);
+      });
+    }
   }
 };
 KEditor$1.components["video"] = {
