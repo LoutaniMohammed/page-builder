@@ -1,26 +1,57 @@
 # KEditor Implementation Tasks
 
 ## ✅ Completed Tasks
+- [x] Vite Migration - webpack to Vite for Node 18+
+- [x] CKEditor 5 Update - CKEditor 4 to 5
+- [x] Bootstrap 5.3.3 CSS and JS added
+- [x] Example HTML files updated
+- [x] Photo, youtube, vimeo, video, googlemap components updated
 
-### Vite Migration
-- [x] Delete webpack.config.js, .babelrc
-- [x] Create package.json with Vite dependencies
-- [x] Create vite.config.js
-- [x] npm install and npm run build
+---
 
-### CKEditor 5 Update
-- [x] Rewrite keditor-component-text.js for CKEditor 5 API
-- [x] Update all HTML example files with CKEditor 5 CDN
+## ⏳ Pending Tasks
 
-### Bootstrap 5 Migration
-- [x] Download Bootstrap 5.3.3 CSS and JS
-- [x] Update all 8 example HTML files
-- [x] Update snippets.html (ratio, img-fluid, rounded-circle, card)
-- [x] Update photo component
-- [x] Update youtube component
-- [x] Update vimeo component
-- [x] Update video component
-- [x] Update googlemap component
+### Component Bootstrap 5 Updates
+- [ ] `keditor-component-form.js` - form-group → mb-3
+- [ ] `keditor-component-form.js` - btn-block → w-100
+- [ ] `keditor-component-form.js` - help-block → form-text
+- [ ] `keditor-component-form.js` - control-label → form-label
+- [ ] `keditor-component-form.js` - col-sm-offset-* → offset-sm-*
+- [ ] `keditor-component-audio.js` - form-group → mb-3
+
+### Responsive Images
+- [ ] Add `img-fluid` to all images in snippets.html
+
+### Bootstrap 5 Responsive Grid Snippets
+
+#### 1 Column Layouts
+- [ ] Full width: `col-12`
+
+#### 2 Column Layouts
+- [ ] 50-50: `col-12 col-md-6` + `col-12 col-md-6`
+- [ ] 33-67: `col-12 col-md-4` + `col-12 col-md-8`
+- [ ] 67-33: `col-12 col-md-8` + `col-12 col-md-4`
+- [ ] 25-75: `col-12 col-md-3` + `col-12 col-md-9`
+- [ ] 75-25: `col-12 col-md-9` + `col-12 col-md-3`
+
+#### 3 Column Layouts
+- [ ] Equal: `col-12 col-md-4` x3
+- [ ] 25-50-25: `col-12 col-md-3` + `col-12 col-md-6` + `col-12 col-md-3`
+- [ ] 16-67-16: `col-12 col-md-2` + `col-12 col-md-8` + `col-12 col-md-2`
+
+#### 4 Column Layouts
+- [ ] Equal: `col-12 col-sm-6 col-md-3` x4
+
+#### 5 Column Layouts (custom)
+- [ ] Custom 5-col using flex/offset
+
+#### 6 Column Layouts
+- [ ] Equal: `col-6 col-md-2` x6
+
+#### Responsive Breakpoints
+- [ ] Mobile first (col-12 stacks on mobile)
+- [ ] Tablet breakpoint (col-sm-*, col-md-*)
+- [ ] Desktop breakpoint (col-lg-*, col-xl-*)
 
 ---
 
@@ -30,15 +61,5 @@
 |---------|--------|
 | Vite Migration | ✅ Complete |
 | CKEditor 5 Update | ✅ Complete |
-| Bootstrap 5 Migration | ✅ Complete |
-
-**All tasks completed!**
-
----
-
-## Commits
-
-1. `9858de9` - Migrate from webpack to Vite
-2. `1d7d397` - Upgrade from CKEditor 4 to CKEditor 5
-3. `d680d56` - Release v0.1.0
-4. `0c75cf2` - Migrate from Bootstrap 3 to Bootstrap 5.3.3
+| Bootstrap 5 Components | 🟡 Partial |
+| BS5 Grid Snippets | ⏳ Pending |
