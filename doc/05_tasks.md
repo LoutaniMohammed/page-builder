@@ -1,35 +1,61 @@
 # KEditor Implementation Tasks
 
-## ✅ All Tasks Completed
+## ⏳ New Bootstrap 5 Components
 
-### Vite Migration ✅
-- [x] Migrate from webpack to Vite for Node 18+
+### Testimonial Carousel (SwiperJS)
+- [ ] Add SwiperJS CDN to examples
+- [ ] Create `keditor-component-carousel.js`
+- [ ] Create carousel snippet HTML with SwiperJS
+- [ ] Add carousel settings (autoplay, loop, pagination, navigation)
+- [ ] Add testimonial content editing (quote, author, avatar)
 
-### CKEditor 5 Update ✅
-- [x] Upgrade from CKEditor 4 to CKEditor 5
+### Pricing Table
+- [ ] Create `keditor-component-pricing.js`
+- [ ] Create pricing table snippet (3-tier layout)
+- [ ] Add pricing card editing (title, price, features, CTA button)
+- [ ] Support highlight/featured tier
 
-### Bootstrap 5 Migration ✅
-- [x] Add Bootstrap 5.3.3 CSS and JS
-- [x] Update all example HTML files
-- [x] Update photo, youtube, vimeo, video, googlemap components
-- [x] Update form component (mb-3, form-label, form-select, form-text, w-100, offset-sm-*)
-- [x] Update audio component (mb-3, form-label, form-check-input)
+### Progress Bar
+- [ ] Create `keditor-component-progress.js`
+- [ ] Create progress bar snippet
+- [ ] Add settings (value, color, striped, animated, label)
 
-### Responsive Grid ✅
-- [x] Update snippets.html to responsive grid (col-12 col-md-*)
-- [x] Add img-fluid to all images
-- [x] Add 5-column layout snippet
-- [x] Add 6-column layout snippet
+### Alert Box
+- [ ] Create `keditor-component-alert.js`
+- [ ] Create alert snippet (success, warning, danger, info)
+- [ ] Add dismissible option
+
+### List Group
+- [ ] Create `keditor-component-list.js`
+- [ ] Create list group snippet
+- [ ] Add list item editing
+
+### Breadcrumbs
+- [ ] Create `keditor-component-breadcrumbs.js`
+- [ ] Create breadcrumb snippet
+
+### Contact Form with Map
+- [ ] Create combined form + Google Map snippet
+- [ ] Two-column layout
+
+### Team Member Showcase
+- [ ] Create `keditor-component-team.js`
+- [ ] Create team member cards (photo, name, role, social links)
+
+### Countdown Timer
+- [ ] Create `keditor-component-countdown.js`
+- [ ] Add target date setting
+- [ ] JavaScript countdown logic
 
 ---
 
-## Summary
+## ✅ Completed
+- [x] Vite Migration
+- [x] CKEditor 5 Update  
+- [x] Bootstrap 5 Migration
+- [x] Responsive Grid
 
 | Section | Status |
 |---------|--------|
-| Vite Migration | ✅ Complete |
-| CKEditor 5 Update | ✅ Complete |
-| Bootstrap 5 Components | ✅ Complete |
-| Responsive Grid | ✅ Complete |
-
-**All tasks completed!**
+| Previous | ✅ Complete |
+| New Components | ⏳ 9 pending |
