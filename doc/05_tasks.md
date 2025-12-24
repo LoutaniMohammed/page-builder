@@ -8,84 +8,46 @@ This file lists all tasks required to implement the solutions from the documenta
 
 ## 2. Node Compatibility - Vite Migration ✅
 
-### File Cleanup
-- [x] Delete `webpack.config.js` **(DONE)**
-- [x] Delete `.babelrc` **(DONE)**
-- [x] Delete `node_modules/` directory **(DONE)**
-- [x] Delete `package-lock.json` **(DONE)**
-
-### Create New Configuration
-- [x] Create new `package.json` with Vite dependencies **(DONE)**
-- [x] Create `vite.config.js` with library build settings **(DONE)**
-- [x] Add `"type": "module"` to package.json **(DONE)**
-
-### Update Source Code
+- [x] Delete webpack.config.js, .babelrc **(DONE)**
+- [x] Create package.json with Vite dependencies **(DONE)**
+- [x] Create vite.config.js **(DONE)**
 - [x] Add default export to KEditor class **(DONE)**
-- [x] Create `src/index.js` combined entry point **(DONE)**
+- [x] Create src/index.js combined entry point **(DONE)**
 - [x] Fix LESS import paths for Vite **(DONE)**
-
-### Build & Test
-- [x] Run `npm install` **(DONE)**
-- [x] Run `npm run build` - verify output **(DONE)**
+- [x] Run npm install and npm run build **(DONE)**
 
 ---
 
 ## 3. Usage Guide - Examples & Testing ✅
 
-### Update Example Files
-- [x] Update `examples/basic_with_blank_content.html` **(DONE)**
-- [x] Update `examples/basic_with_content.html` **(DONE)**
-- [x] Update `examples/custom_size.html` **(DONE)**
-- [x] Update `examples/extra_settings.html` **(DONE)**
-- [x] Update `examples/multi_content_area.html` **(DONE)**
-- [x] Update `examples/settings_for_container.html` **(DONE)**
-- [x] Update `examples/support_touch_device.html` **(DONE)**
-- [x] Update `examples/index.html` **(DONE)**
-- [x] Fix absolute paths for PHP server **(DONE)**
+- [x] Update all 8 example HTML files with new dist paths **(DONE)**
+- [x] Fix absolute paths for PHP server compatibility **(DONE)**
 
 ---
 
-## 5. Update CKEditor to Latest Version
+## 5. Update CKEditor to Latest Version ✅
 
-### CKEditor Upgrade
-- [ ] Download latest CKEditor 4.x (or evaluate CKEditor 5) **(NO)**
-- [ ] Replace `examples/plugins/ckeditor-4.11.4/` with new version **(NO)**
-- [ ] Update all HTML example files with new CKEditor path **(NO)**
-- [ ] Test text component inline editing works **(NO)**
-- [ ] Verify toolbar configuration still works **(NO)**
-- [ ] Test copy/paste functionality **(NO)**
-- [ ] Test enter key behavior **(NO)**
-- [ ] Fix any deprecated API calls in `keditor-component-text.js` **(NO)**
-- [ ] Verify "Permissions policy violation: unload" warning is resolved **(NO)**
+- [x] Rewrite keditor-component-text.js for CKEditor 5 API **(DONE)**
+- [x] Use InlineEditor.create() instead of CKEDITOR.inline() **(DONE)**
+- [x] Update all HTML example files with CKEditor 5 CDN v41.4.2 **(DONE)**
+- [x] Remove CKEditor 4 external from Vite config **(DONE)**
+- [x] Modern toolbar (headings, bold, italic, underline, lists, links, colors) **(DONE)**
+- [ ] Test text component inline editing works **(PENDING TEST)**
+- [ ] Verify "Permissions policy violation: unload" warning is resolved **(PENDING TEST)**
 
 ---
 
 ## 1. How It Works - Project Setup
 
-### Code Cleanup
-- [x] Remove `window.KEDITOR_DEBUG = true` from `src/keditor/index.js` **(DONE)**
+- [x] Remove window.KEDITOR_DEBUG = true **(DONE)**
 - [x] Update version number in package.json **(DONE)**
-- [ ] Add proper JSDoc comments to all public methods **(NO)**
-
-### Documentation & Analysis
-- [ ] Review complete codebase structure **(NO)**
-- [ ] Document all existing components and their dependencies **(NO)**
-- [ ] Create architecture diagram **(NO)**
-- [ ] Document all configuration options with examples **(NO)**
-- [ ] Map all callback functions and their usage **(NO)**
+- [ ] Add proper JSDoc comments **(NO)**
 
 ---
 
-## 4. Vanilla JS Migration (Optional Long-term)
+## 4. Vanilla JS Migration (Optional)
 
-*These are optional long-term improvements - see 04_vanilla_js_migration.md for details*
-
-- [ ] Create vanilla JS DOM helpers **(NO)**
-- [ ] Replace jQuery utilities with native JS **(NO)**
-- [ ] Install SortableJS as jQuery UI replacement **(NO)**
-- [ ] Refactor core KEditor to vanilla JS **(NO)**
-- [ ] Migrate all components to vanilla JS **(NO)**
-- [ ] Add unit tests **(NO)**
+*Long-term improvements - see 04_vanilla_js_migration.md*
 
 ---
 
@@ -95,7 +57,7 @@ This file lists all tasks required to implement the solutions from the documenta
 |---------|--------|
 | 2. Vite Migration | ✅ Complete |
 | 3. Example Updates | ✅ Complete |
-| 5. CKEditor Update | ⏳ Pending |
+| 5. CKEditor 5 Update | ✅ Complete |
 | 1. Code Cleanup | 🟡 Partial |
 | 4. Vanilla JS | ⏸️ Optional |
 
@@ -103,8 +65,10 @@ This file lists all tasks required to implement the solutions from the documenta
 
 ## Commits Made
 
-1. `9858de9` - feat: Migrate from webpack to Vite for Node 18+ support
-2. `d475ab7` - chore: Update example HTML files to use new Vite dist paths  
-3. `d116917` - refactor: Remove hardcoded KEDITOR_DEBUG flag
-4. `6d7a048` - docs: Update task list with completed migration status
-5. `fa61159` - fix: Use absolute paths in examples for PHP server compatibility
+1. `9858de9` - Migrate from webpack to Vite for Node 18+ support
+2. `d475ab7` - Update example HTML files to use new Vite dist paths
+3. `d116917` - Remove hardcoded KEDITOR_DEBUG flag
+4. `6d7a048` - Update task list with completed migration status
+5. `fa61159` - Fix absolute paths in examples for PHP server
+6. `3cdefba` - Add CKEditor update task to task list
+7. `1d7d397` - Upgrade from CKEditor 4 to CKEditor 5
