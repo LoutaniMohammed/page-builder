@@ -16,15 +16,23 @@
 @import "./keditor/_jquery-ui";
 @import "./keditor/_utilities";
 
-// Swiper Carousel styles
+// Swiper Carousel styles - ensure one slide per view
 .swiper {
     width: 100%;
     overflow: hidden;
+    position: relative;
+}
+
+.swiper-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .swiper-slide {
-    width: 100%;
+    width: 100% !important;
     flex-shrink: 0;
+    display: block;
 }
 
 .swiper-button-prev,
