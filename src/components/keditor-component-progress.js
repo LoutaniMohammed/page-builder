@@ -16,6 +16,12 @@ KEditor.components['progress'] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Label Text</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control progress-label-text" placeholder="Optional label (e.g. 'Loading...')" />
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="col-sm-12 form-label">Color</label>
                     <div class="col-sm-12">
                         <select class="form-select progress-color">
@@ -24,6 +30,16 @@ KEditor.components['progress'] = {
                             <option value="bg-info">Info (Cyan)</option>
                             <option value="bg-warning">Warning (Yellow)</option>
                             <option value="bg-danger">Danger (Red)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Height</label>
+                    <div class="col-sm-12">
+                        <select class="form-select progress-height">
+                            <option value="">Default</option>
+                            <option value="thin">Thin (4px)</option>
+                            <option value="thick">Thick (30px)</option>
                         </select>
                     </div>
                 </div>
@@ -44,6 +60,12 @@ KEditor.components['progress'] = {
                         </div>
                     </div>
                 </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control progress-css-class" placeholder="e.g. my-custom-progress" />
+                    </div>
+                </div>
             </form>
         `);
         
@@ -56,7 +78,23 @@ KEditor.components['progress'] = {
             let progressBar = component.find('.progress-bar');
             let progressLabel = component.find('.progress-label');
             progressBar.css('width', value + '%').attr('aria-valuenow', value);
-            if (progressLabel.length) {
+            // Only update label if it's showing percentage
+            let labelText = progressLabel.attr('data-custom-text');
+            if (!labelText) {
+                progressLabel.text(value + '%');
+            }
+        });
+        
+        let labelTextInput = form.find('.progress-label-text');
+        labelTextInput.on('input', function () {
+            let component = keditor.getSettingComponent();
+            let progressLabel = component.find('.progress-label');
+            if (this.value) {
+                progressLabel.attr('data-custom-text', this.value);
+                progressLabel.text(this.value);
+            } else {
+                progressLabel.removeAttr('data-custom-text');
+                let value = component.find('.progress-bar').attr('aria-valuenow') || '50';
                 progressLabel.text(value + '%');
             }
         });
@@ -67,6 +105,17 @@ KEditor.components['progress'] = {
             progressBar.removeClass('bg-success bg-info bg-warning bg-danger');
             if (this.value) {
                 progressBar.addClass(this.value);
+            }
+        });
+        
+        let heightSelect = form.find('.progress-height');
+        heightSelect.on('change', function () {
+            let progress = keditor.getSettingComponent().find('.progress');
+            progress.css('height', '');
+            if (this.value === 'thin') {
+                progress.css('height', '4px');
+            } else if (this.value === 'thick') {
+                progress.css('height', '30px');
             }
         });
         
@@ -95,6 +144,15 @@ KEditor.components['progress'] = {
                 label.remove();
             }
         });
+        
+        let cssClassInput = form.find('.progress-css-class');
+        cssClassInput.on('input', function () {
+            let wrapper = keditor.getSettingComponent().find('.progress-wrapper');
+            let customClass = wrapper.attr('data-custom-class') || '';
+            if (customClass) wrapper.removeClass(customClass);
+            wrapper.attr('data-custom-class', this.value);
+            wrapper.addClass(this.value);
+        });
     },
     
     showSettingForm: function (form, component, keditor) {
@@ -104,14 +162,23 @@ KEditor.components['progress'] = {
         form.find('.progress-value').val(value);
         form.find('.progress-value-display').text(value + '%');
         
+        let labelText = component.find('.progress-label').attr('data-custom-text') || '';
+        form.find('.progress-label-text').val(labelText);
+        
         if (progressBar.hasClass('bg-success')) form.find('.progress-color').val('bg-success');
         else if (progressBar.hasClass('bg-info')) form.find('.progress-color').val('bg-info');
         else if (progressBar.hasClass('bg-warning')) form.find('.progress-color').val('bg-warning');
         else if (progressBar.hasClass('bg-danger')) form.find('.progress-color').val('bg-danger');
         else form.find('.progress-color').val('');
         
+        let height = component.find('.progress').css('height');
+        if (height === '4px') form.find('.progress-height').val('thin');
+        else if (height === '30px') form.find('.progress-height').val('thick');
+        else form.find('.progress-height').val('');
+        
         form.find('.progress-striped').prop('checked', progressBar.hasClass('progress-bar-striped'));
         form.find('.progress-animated').prop('checked', progressBar.hasClass('progress-bar-animated'));
         form.find('.progress-show-label').prop('checked', component.find('.progress-label').length > 0);
+        form.find('.progress-css-class').val(component.find('.progress-wrapper').attr('data-custom-class') || '');
     }
 };

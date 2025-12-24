@@ -3465,6 +3465,12 @@ KEditor$1.components["progress"] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Label Text</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control progress-label-text" placeholder="Optional label (e.g. 'Loading...')" />
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="col-sm-12 form-label">Color</label>
                     <div class="col-sm-12">
                         <select class="form-select progress-color">
@@ -3473,6 +3479,16 @@ KEditor$1.components["progress"] = {
                             <option value="bg-info">Info (Cyan)</option>
                             <option value="bg-warning">Warning (Yellow)</option>
                             <option value="bg-danger">Danger (Red)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Height</label>
+                    <div class="col-sm-12">
+                        <select class="form-select progress-height">
+                            <option value="">Default</option>
+                            <option value="thin">Thin (4px)</option>
+                            <option value="thick">Thick (30px)</option>
                         </select>
                     </div>
                 </div>
@@ -3493,6 +3509,12 @@ KEditor$1.components["progress"] = {
                         </div>
                     </div>
                 </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control progress-css-class" placeholder="e.g. my-custom-progress" />
+                    </div>
+                </div>
             </form>
         `);
     let valueInput = form.find(".progress-value");
@@ -3504,7 +3526,21 @@ KEditor$1.components["progress"] = {
       let progressBar = component.find(".progress-bar");
       let progressLabel = component.find(".progress-label");
       progressBar.css("width", value + "%").attr("aria-valuenow", value);
-      if (progressLabel.length) {
+      let labelText = progressLabel.attr("data-custom-text");
+      if (!labelText) {
+        progressLabel.text(value + "%");
+      }
+    });
+    let labelTextInput = form.find(".progress-label-text");
+    labelTextInput.on("input", function() {
+      let component = keditor.getSettingComponent();
+      let progressLabel = component.find(".progress-label");
+      if (this.value) {
+        progressLabel.attr("data-custom-text", this.value);
+        progressLabel.text(this.value);
+      } else {
+        progressLabel.removeAttr("data-custom-text");
+        let value = component.find(".progress-bar").attr("aria-valuenow") || "50";
         progressLabel.text(value + "%");
       }
     });
@@ -3514,6 +3550,16 @@ KEditor$1.components["progress"] = {
       progressBar.removeClass("bg-success bg-info bg-warning bg-danger");
       if (this.value) {
         progressBar.addClass(this.value);
+      }
+    });
+    let heightSelect = form.find(".progress-height");
+    heightSelect.on("change", function() {
+      let progress = keditor.getSettingComponent().find(".progress");
+      progress.css("height", "");
+      if (this.value === "thin") {
+        progress.css("height", "4px");
+      } else if (this.value === "thick") {
+        progress.css("height", "30px");
       }
     });
     let stripedCheck = form.find(".progress-striped");
@@ -3539,20 +3585,35 @@ KEditor$1.components["progress"] = {
         label.remove();
       }
     });
+    let cssClassInput = form.find(".progress-css-class");
+    cssClassInput.on("input", function() {
+      let wrapper = keditor.getSettingComponent().find(".progress-wrapper");
+      let customClass = wrapper.attr("data-custom-class") || "";
+      if (customClass) wrapper.removeClass(customClass);
+      wrapper.attr("data-custom-class", this.value);
+      wrapper.addClass(this.value);
+    });
   },
   showSettingForm: function(form, component, keditor) {
     let progressBar = component.find(".progress-bar");
     let value = progressBar.attr("aria-valuenow") || "50";
     form.find(".progress-value").val(value);
     form.find(".progress-value-display").text(value + "%");
+    let labelText = component.find(".progress-label").attr("data-custom-text") || "";
+    form.find(".progress-label-text").val(labelText);
     if (progressBar.hasClass("bg-success")) form.find(".progress-color").val("bg-success");
     else if (progressBar.hasClass("bg-info")) form.find(".progress-color").val("bg-info");
     else if (progressBar.hasClass("bg-warning")) form.find(".progress-color").val("bg-warning");
     else if (progressBar.hasClass("bg-danger")) form.find(".progress-color").val("bg-danger");
     else form.find(".progress-color").val("");
+    let height = component.find(".progress").css("height");
+    if (height === "4px") form.find(".progress-height").val("thin");
+    else if (height === "30px") form.find(".progress-height").val("thick");
+    else form.find(".progress-height").val("");
     form.find(".progress-striped").prop("checked", progressBar.hasClass("progress-bar-striped"));
     form.find(".progress-animated").prop("checked", progressBar.hasClass("progress-bar-animated"));
     form.find(".progress-show-label").prop("checked", component.find(".progress-label").length > 0);
+    form.find(".progress-css-class").val(component.find(".progress-wrapper").attr("data-custom-class") || "");
   }
 };
 KEditor$1.components["alert"] = {
@@ -3561,6 +3622,18 @@ KEditor$1.components["alert"] = {
   initSettingForm: function(form, keditor) {
     form.append(`
             <form class="form-horizontal">
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Title</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control alert-title" placeholder="e.g. Success!" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Message</label>
+                    <div class="col-sm-12">
+                        <textarea class="form-control alert-message" rows="2" placeholder="Alert message..."></textarea>
+                    </div>
+                </div>
                 <div class="mb-3">
                     <label class="col-sm-12 form-label">Alert Type</label>
                     <div class="col-sm-12">
@@ -3577,6 +3650,18 @@ KEditor$1.components["alert"] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Icon</label>
+                    <div class="col-sm-12">
+                        <select class="form-select alert-icon">
+                            <option value="">None</option>
+                            <option value="fa-check-circle">✓ Check Circle</option>
+                            <option value="fa-info-circle">ℹ Info Circle</option>
+                            <option value="fa-exclamation-triangle">⚠ Warning</option>
+                            <option value="fa-times-circle">✕ Error</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="col-sm-12 form-label">Options</label>
                     <div class="col-sm-12">
                         <div class="form-check">
@@ -3585,13 +3670,62 @@ KEditor$1.components["alert"] = {
                         </div>
                     </div>
                 </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control alert-css-class" placeholder="e.g. my-custom-alert" />
+                    </div>
+                </div>
             </form>
         `);
+    let titleInput = form.find(".alert-title");
+    titleInput.on("input", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      let strong = alert2.find("strong");
+      if (strong.length === 0) {
+        alert2.prepend("<strong></strong> ");
+        strong = alert2.find("strong");
+      }
+      strong.text(this.value);
+    });
+    let messageInput = form.find(".alert-message");
+    messageInput.on("input", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      let strong = alert2.find("strong");
+      let closeBtn = alert2.find(".btn-close");
+      let content = this.value;
+      alert2.contents().filter(function() {
+        return this.nodeType === 3;
+      }).remove();
+      if (strong.length) {
+        strong.after(" " + content);
+      } else {
+        if (closeBtn.length) {
+          closeBtn.before(content);
+        } else {
+          alert2.append(content);
+        }
+      }
+    });
     let typeSelect = form.find(".alert-type");
     typeSelect.on("change", function() {
       let alert2 = keditor.getSettingComponent().find(".alert");
       alert2.removeClass("alert-primary alert-secondary alert-success alert-danger alert-warning alert-info alert-light alert-dark");
       alert2.addClass(this.value);
+    });
+    let iconSelect = form.find(".alert-icon");
+    iconSelect.on("change", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      let icon = alert2.find("i.fa");
+      if (this.value) {
+        if (icon.length === 0) {
+          alert2.prepend('<i class="fa ' + this.value + ' me-2"></i>');
+        } else {
+          icon.attr("class", "fa " + this.value + " me-2");
+        }
+      } else {
+        icon.remove();
+      }
     });
     let dismissibleCheck = form.find(".alert-dismissible-check");
     dismissibleCheck.on("change", function() {
@@ -3606,9 +3740,23 @@ KEditor$1.components["alert"] = {
         alert2.find(".btn-close").remove();
       }
     });
+    let cssClassInput = form.find(".alert-css-class");
+    cssClassInput.on("input", function() {
+      let alert2 = keditor.getSettingComponent().find(".alert");
+      let customClass = alert2.attr("data-custom-class") || "";
+      if (customClass) {
+        alert2.removeClass(customClass);
+      }
+      alert2.attr("data-custom-class", this.value);
+      alert2.addClass(this.value);
+    });
   },
   showSettingForm: function(form, component, keditor) {
     let alert2 = component.find(".alert");
+    let strong = alert2.find("strong");
+    form.find(".alert-title").val(strong.text());
+    let fullText = alert2.clone().children().remove().end().text().trim();
+    form.find(".alert-message").val(fullText);
     let types = ["alert-primary", "alert-secondary", "alert-success", "alert-danger", "alert-warning", "alert-info", "alert-light", "alert-dark"];
     for (let type of types) {
       if (alert2.hasClass(type)) {
@@ -3616,7 +3764,15 @@ KEditor$1.components["alert"] = {
         break;
       }
     }
+    let icon = alert2.find("i.fa");
+    if (icon.length) {
+      let iconClass = icon.attr("class").replace("fa ", "").replace(" me-2", "");
+      form.find(".alert-icon").val(iconClass);
+    } else {
+      form.find(".alert-icon").val("");
+    }
     form.find(".alert-dismissible-check").prop("checked", alert2.hasClass("alert-dismissible"));
+    form.find(".alert-css-class").val(alert2.attr("data-custom-class") || "");
   }
 };
 KEditor$1.components["list"] = {
@@ -3636,13 +3792,21 @@ KEditor$1.components["list"] = {
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Add Item</label>
+                    <label class="col-sm-12 form-label">Items</label>
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-sm btn-primary btn-add-item w-100">+ Add List Item</button>
+                        <div class="list-items-editor"></div>
+                        <button type="button" class="btn btn-sm btn-primary btn-add-item w-100 mt-2">+ Add Item</button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control list-css-class" placeholder="e.g. my-custom-list" />
                     </div>
                 </div>
             </form>
         `);
+    let self = this;
     let styleSelect = form.find(".list-style");
     styleSelect.on("change", function() {
       let listGroup = keditor.getSettingComponent().find(".list-group");
@@ -3655,6 +3819,40 @@ KEditor$1.components["list"] = {
     addItemBtn.on("click", function() {
       let listGroup = keditor.getSettingComponent().find(".list-group");
       listGroup.append('<li class="list-group-item">New Item</li>');
+      self.refreshItemsEditor(form, keditor);
+    });
+    let cssClassInput = form.find(".list-css-class");
+    cssClassInput.on("input", function() {
+      let listGroup = keditor.getSettingComponent().find(".list-group");
+      let customClass = listGroup.attr("data-custom-class") || "";
+      if (customClass) listGroup.removeClass(customClass);
+      listGroup.attr("data-custom-class", this.value);
+      listGroup.addClass(this.value);
+    });
+  },
+  refreshItemsEditor: function(form, keditor) {
+    let listGroup = keditor.getSettingComponent().find(".list-group");
+    let itemsEditor = form.find(".list-items-editor");
+    itemsEditor.empty();
+    listGroup.find(".list-group-item").each(function(index) {
+      let item = $(this);
+      let itemRow = $(`
+                <div class="input-group input-group-sm mb-1">
+                    <input type="text" class="form-control item-text" value="${item.text()}" data-index="${index}" />
+                    <button type="button" class="btn btn-outline-danger btn-remove-item" data-index="${index}">×</button>
+                </div>
+            `);
+      itemsEditor.append(itemRow);
+    });
+    itemsEditor.find(".item-text").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".list-group-item").eq(index).text(this.value);
+    });
+    itemsEditor.find(".btn-remove-item").on("click", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".list-group-item").eq(index).remove();
+      let self = KEditor$1.components["list"];
+      self.refreshItemsEditor(form, keditor);
     });
   },
   showSettingForm: function(form, component, keditor) {
@@ -3666,6 +3864,8 @@ KEditor$1.components["list"] = {
     } else {
       form.find(".list-style").val("");
     }
+    form.find(".list-css-class").val(listGroup.attr("data-custom-class") || "");
+    this.refreshItemsEditor(form, keditor);
   }
 };
 KEditor$1.components["breadcrumbs"] = {
@@ -3686,13 +3886,21 @@ KEditor$1.components["breadcrumbs"] = {
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Add Item</label>
+                    <label class="col-sm-12 form-label">Breadcrumb Items</label>
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-sm btn-primary btn-add-crumb w-100">+ Add Breadcrumb</button>
+                        <div class="breadcrumb-items-editor"></div>
+                        <button type="button" class="btn btn-sm btn-primary btn-add-crumb w-100 mt-2">+ Add Breadcrumb</button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control breadcrumb-css-class" placeholder="e.g. my-custom-breadcrumb" />
                     </div>
                 </div>
             </form>
         `);
+    let self = this;
     let dividerSelect = form.find(".breadcrumb-divider");
     dividerSelect.on("change", function() {
       let nav = keditor.getSettingComponent().find("nav");
@@ -3702,9 +3910,77 @@ KEditor$1.components["breadcrumbs"] = {
     addBtn.on("click", function() {
       let breadcrumb = keditor.getSettingComponent().find(".breadcrumb");
       let lastItem = breadcrumb.find(".breadcrumb-item").last();
-      lastItem.removeClass("active").attr("aria-current", null);
-      lastItem.html('<a href="#">' + lastItem.text() + "</a>");
+      if (lastItem.hasClass("active")) {
+        lastItem.removeClass("active").removeAttr("aria-current");
+        let text = lastItem.text();
+        lastItem.html('<a href="#">' + text + "</a>");
+      }
       breadcrumb.append('<li class="breadcrumb-item active" aria-current="page">New Page</li>');
+      self.refreshItemsEditor(form, keditor);
+    });
+    let cssClassInput = form.find(".breadcrumb-css-class");
+    cssClassInput.on("input", function() {
+      let nav = keditor.getSettingComponent().find("nav");
+      let customClass = nav.attr("data-custom-class") || "";
+      if (customClass) nav.removeClass(customClass);
+      nav.attr("data-custom-class", this.value);
+      nav.addClass(this.value);
+    });
+  },
+  refreshItemsEditor: function(form, keditor) {
+    let breadcrumb = keditor.getSettingComponent().find(".breadcrumb");
+    let itemsEditor = form.find(".breadcrumb-items-editor");
+    itemsEditor.empty();
+    breadcrumb.find(".breadcrumb-item").each(function(index) {
+      let item = $(this);
+      let text = item.find("a").length ? item.find("a").text() : item.text();
+      let link = item.find("a").attr("href") || "";
+      let isActive = item.hasClass("active");
+      let itemRow = $(`
+                <div class="card card-body p-2 mb-1">
+                    <div class="input-group input-group-sm mb-1">
+                        <span class="input-group-text">Text</span>
+                        <input type="text" class="form-control crumb-text" value="${text}" data-index="${index}" />
+                        <button type="button" class="btn btn-outline-danger btn-remove-crumb" data-index="${index}">×</button>
+                    </div>
+                    ${!isActive ? `
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text">Link</span>
+                        <input type="text" class="form-control crumb-link" value="${link}" data-index="${index}" />
+                    </div>
+                    ` : '<small class="text-muted">Active (current page)</small>'}
+                </div>
+            `);
+      itemsEditor.append(itemRow);
+    });
+    itemsEditor.find(".crumb-text").on("input", function() {
+      let index = $(this).data("index");
+      let item = keditor.getSettingComponent().find(".breadcrumb-item").eq(index);
+      if (item.find("a").length) {
+        item.find("a").text(this.value);
+      } else {
+        item.text(this.value);
+      }
+    });
+    itemsEditor.find(".crumb-link").on("input", function() {
+      let index = $(this).data("index");
+      let item = keditor.getSettingComponent().find(".breadcrumb-item").eq(index);
+      item.find("a").attr("href", this.value);
+    });
+    itemsEditor.find(".btn-remove-crumb").on("click", function() {
+      let index = $(this).data("index");
+      let items = keditor.getSettingComponent().find(".breadcrumb-item");
+      if (items.length > 1) {
+        items.eq(index).remove();
+        let lastItem = keditor.getSettingComponent().find(".breadcrumb-item").last();
+        if (!lastItem.hasClass("active")) {
+          lastItem.addClass("active").attr("aria-current", "page");
+          let text = lastItem.find("a").text();
+          lastItem.html(text);
+        }
+        let self = KEditor$1.components["breadcrumbs"];
+        self.refreshItemsEditor(form, keditor);
+      }
     });
   },
   showSettingForm: function(form, component, keditor) {
@@ -3712,6 +3988,8 @@ KEditor$1.components["breadcrumbs"] = {
     let divider = nav.css("--bs-breadcrumb-divider") || "/";
     divider = divider.replace(/'/g, "");
     form.find(".breadcrumb-divider").val(divider);
+    form.find(".breadcrumb-css-class").val(nav.attr("data-custom-class") || "");
+    this.refreshItemsEditor(form, keditor);
   }
 };
 KEditor$1.components["pricing"] = {
@@ -3721,60 +3999,148 @@ KEditor$1.components["pricing"] = {
     form.append(`
             <form class="form-horizontal">
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Columns</label>
+                    <label class="col-sm-12 form-label">Pricing Tiers</label>
                     <div class="col-sm-12">
-                        <select class="form-select pricing-columns">
-                            <option value="2">2 Tiers</option>
-                            <option value="3" selected>3 Tiers</option>
-                            <option value="4">4 Tiers</option>
-                        </select>
+                        <div class="pricing-tiers-editor"></div>
+                        <button type="button" class="btn btn-sm btn-primary btn-add-tier w-100 mt-2">+ Add Tier</button>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Style</label>
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
                     <div class="col-sm-12">
-                        <select class="form-select pricing-style">
-                            <option value="card">Card Style</option>
-                            <option value="bordered">Bordered</option>
-                        </select>
+                        <input type="text" class="form-control pricing-css-class" placeholder="e.g. my-custom-pricing" />
                     </div>
                 </div>
             </form>
         `);
-    let columnsSelect = form.find(".pricing-columns");
-    columnsSelect.on("change", function() {
+    let self = this;
+    let addTierBtn = form.find(".btn-add-tier");
+    addTierBtn.on("click", function() {
       let pricingRow = keditor.getSettingComponent().find(".pricing-row");
-      let currentCols = pricingRow.children(".pricing-col").length;
-      let newCols = parseInt(this.value);
-      if (newCols > currentCols) {
-        for (let i = currentCols; i < newCols; i++) {
-          pricingRow.append(`
-                        <div class="col-12 col-md pricing-col">
-                            <div class="card text-center">
-                                <div class="card-header">Tier ${i + 1}</div>
-                                <div class="card-body">
-                                    <h5 class="card-title pricing-amount">$${(i + 1) * 10}/mo</h5>
-                                    <ul class="list-unstyled">
-                                        <li>Feature 1</li>
-                                        <li>Feature 2</li>
-                                        <li>Feature 3</li>
-                                    </ul>
-                                    <a href="#" class="btn btn-primary">Select</a>
-                                </div>
+      pricingRow.append(`
+                <div class="col-12 col-md pricing-col">
+                    <div class="card text-center">
+                        <div class="card-header">New Tier</div>
+                        <div class="card-body">
+                            <h5 class="card-title pricing-amount">$0/mo</h5>
+                            <ul class="list-unstyled pricing-features">
+                                <li>Feature 1</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline-primary pricing-btn">Select</a>
+                        </div>
+                    </div>
+                </div>
+            `);
+      self.refreshTiersEditor(form, keditor);
+    });
+    let cssClassInput = form.find(".pricing-css-class");
+    cssClassInput.on("input", function() {
+      let row = keditor.getSettingComponent().find(".pricing-row");
+      let customClass = row.attr("data-custom-class") || "";
+      if (customClass) row.removeClass(customClass);
+      row.attr("data-custom-class", this.value);
+      row.addClass(this.value);
+    });
+  },
+  refreshTiersEditor: function(form, keditor) {
+    let tiersEditor = form.find(".pricing-tiers-editor");
+    tiersEditor.empty();
+    keditor.getSettingComponent().find(".pricing-col").each(function(index) {
+      let tier = $(this);
+      let name = tier.find(".card-header").text();
+      let price = tier.find(".pricing-amount").text();
+      let btnText = tier.find(".pricing-btn").text() || tier.find(".card-body .btn").text();
+      let btnLink = tier.find(".pricing-btn").attr("href") || tier.find(".card-body .btn").attr("href") || "#";
+      let isFeatured = tier.find(".card").hasClass("border-primary");
+      let features = [];
+      tier.find(".pricing-features li, .list-unstyled li").each(function() {
+        features.push($(this).text());
+      });
+      let tierCard = $(`
+                <div class="card mb-2" data-index="${index}">
+                    <div class="card-header p-2 d-flex justify-content-between align-items-center">
+                        <span>Tier ${index + 1}: ${name}</span>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-tier" data-index="${index}">×</button>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm tier-name" value="${name}" data-index="${index}" placeholder="Tier Name" />
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm tier-price" value="${price}" data-index="${index}" placeholder="e.g. $19/mo" />
+                        </div>
+                        <div class="mb-2">
+                            <textarea class="form-control form-control-sm tier-features" rows="3" data-index="${index}" placeholder="One feature per line">${features.join("\n")}</textarea>
+                        </div>
+                        <div class="row g-1 mb-2">
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm tier-btn-text" value="${btnText}" data-index="${index}" placeholder="Button Text" />
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm tier-btn-link" value="${btnLink}" data-index="${index}" placeholder="Button Link" />
                             </div>
                         </div>
-                    `);
-        }
-      } else if (newCols < currentCols) {
-        for (let i = currentCols; i > newCols; i--) {
-          pricingRow.children(".pricing-col").last().remove();
-        }
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input tier-featured" data-index="${index}" ${isFeatured ? "checked" : ""} />
+                            <label class="form-check-label">Featured</label>
+                        </div>
+                    </div>
+                </div>
+            `);
+      tiersEditor.append(tierCard);
+    });
+    tiersEditor.find(".tier-name").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".pricing-col").eq(index).find(".card-header").text(this.value);
+    });
+    tiersEditor.find(".tier-price").on("input", function() {
+      let index = $(this).data("index");
+      let amountEl = keditor.getSettingComponent().find(".pricing-col").eq(index).find(".pricing-amount, .card-title").first();
+      amountEl.text(this.value);
+    });
+    tiersEditor.find(".tier-features").on("input", function() {
+      let index = $(this).data("index");
+      let features = this.value.split("\n").filter((f) => f.trim());
+      let ul = keditor.getSettingComponent().find(".pricing-col").eq(index).find(".pricing-features, .list-unstyled").first();
+      ul.empty();
+      features.forEach((f) => ul.append("<li>" + f + "</li>"));
+    });
+    tiersEditor.find(".tier-btn-text").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".pricing-col").eq(index).find(".pricing-btn, .card-body .btn").first().text(this.value);
+    });
+    tiersEditor.find(".tier-btn-link").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".pricing-col").eq(index).find(".pricing-btn, .card-body .btn").first().attr("href", this.value);
+    });
+    tiersEditor.find(".tier-featured").on("change", function() {
+      let index = $(this).data("index");
+      let card = keditor.getSettingComponent().find(".pricing-col").eq(index).find(".card");
+      let header = card.find(".card-header");
+      let btn = card.find(".pricing-btn, .card-body .btn").first();
+      if (this.checked) {
+        card.addClass("border-primary");
+        header.addClass("bg-primary text-white");
+        btn.removeClass("btn-outline-primary").addClass("btn-primary");
+      } else {
+        card.removeClass("border-primary");
+        header.removeClass("bg-primary text-white");
+        btn.removeClass("btn-primary").addClass("btn-outline-primary");
+      }
+    });
+    tiersEditor.find(".btn-remove-tier").on("click", function() {
+      let index = $(this).data("index");
+      let tiers = keditor.getSettingComponent().find(".pricing-col");
+      if (tiers.length > 1) {
+        tiers.eq(index).remove();
+        let self = KEditor$1.components["pricing"];
+        self.refreshTiersEditor(form, keditor);
       }
     });
   },
   showSettingForm: function(form, component, keditor) {
-    let cols = component.find(".pricing-col").length;
-    form.find(".pricing-columns").val(cols.toString());
+    form.find(".pricing-css-class").val(component.find(".pricing-row").attr("data-custom-class") || "");
+    this.refreshTiersEditor(form, keditor);
   }
 };
 KEditor$1.components["team"] = {
@@ -3787,36 +4153,38 @@ KEditor$1.components["team"] = {
                     <label class="col-sm-12 form-label">Layout</label>
                     <div class="col-sm-12">
                         <select class="form-select team-layout">
-                            <option value="3">3 Members per Row</option>
-                            <option value="4">4 Members per Row</option>
-                            <option value="2">2 Members per Row</option>
+                            <option value="3">3 per Row</option>
+                            <option value="4">4 per Row</option>
+                            <option value="2">2 per Row</option>
                         </select>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="col-sm-12 form-label">Card Style</label>
+                    <label class="col-sm-12 form-label">Team Members</label>
                     <div class="col-sm-12">
-                        <select class="form-select team-style">
-                            <option value="card">Card with Shadow</option>
-                            <option value="simple">Simple</option>
-                        </select>
+                        <div class="team-members-editor"></div>
+                        <button type="button" class="btn btn-sm btn-primary btn-add-member w-100 mt-2">+ Add Member</button>
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-sm btn-primary btn-add-member w-100">+ Add Team Member</button>
+                        <input type="text" class="form-control team-css-class" placeholder="e.g. my-custom-team" />
                     </div>
                 </div>
             </form>
         `);
+    let self = this;
     let layoutSelect = form.find(".team-layout");
     layoutSelect.on("change", function() {
       let cols = parseInt(this.value);
       let colClass = cols === 2 ? "col-12 col-md-6" : cols === 3 ? "col-12 col-md-4" : "col-12 col-md-3";
-      keditor.getSettingComponent().find(".team-member").attr("class", "team-member " + colClass);
+      keditor.getSettingComponent().find(".team-member").each(function() {
+        $(this).attr("class", "team-member " + colClass);
+      });
     });
-    let addBtn = form.find(".btn-add-member");
-    addBtn.on("click", function() {
+    let addMemberBtn = form.find(".btn-add-member");
+    addMemberBtn.on("click", function() {
       let teamRow = keditor.getSettingComponent().find(".team-row");
       let colClass = "col-12 col-md-4";
       teamRow.append(`
@@ -3824,16 +4192,76 @@ KEditor$1.components["team"] = {
                     <div class="card text-center shadow-sm">
                         <img src="https://placehold.co/150" class="card-img-top rounded-circle mx-auto mt-3" style="width: 100px; height: 100px;" alt="Team Member">
                         <div class="card-body">
-                            <h5 class="card-title">Team Member</h5>
-                            <p class="card-text text-muted">Role / Position</p>
-                            <div class="social-links">
-                                <a href="#" class="text-primary me-2"><i class="fa fa-linkedin"></i></a>
-                                <a href="#" class="text-info me-2"><i class="fa fa-twitter"></i></a>
-                            </div>
+                            <h5 class="card-title member-name">New Member</h5>
+                            <p class="card-text text-muted member-role">Role / Position</p>
+                            <div class="social-links"></div>
                         </div>
                     </div>
                 </div>
             `);
+      self.refreshMembersEditor(form, keditor);
+    });
+    let cssClassInput = form.find(".team-css-class");
+    cssClassInput.on("input", function() {
+      let row = keditor.getSettingComponent().find(".team-row");
+      let customClass = row.attr("data-custom-class") || "";
+      if (customClass) row.removeClass(customClass);
+      row.attr("data-custom-class", this.value);
+      row.addClass(this.value);
+    });
+  },
+  refreshMembersEditor: function(form, keditor) {
+    let membersEditor = form.find(".team-members-editor");
+    membersEditor.empty();
+    keditor.getSettingComponent().find(".team-member").each(function(index) {
+      let member = $(this);
+      let name = member.find(".card-title, .member-name").text();
+      let role = member.find(".card-text, .member-role").text();
+      let imgSrc = member.find("img").attr("src");
+      let memberCard = $(`
+                <div class="card mb-2" data-index="${index}">
+                    <div class="card-header p-2 d-flex justify-content-between align-items-center">
+                        <span>Member ${index + 1}: ${name}</span>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-member" data-index="${index}">×</button>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm">Photo URL</label>
+                            <input type="text" class="form-control form-control-sm member-img" value="${imgSrc}" data-index="${index}" placeholder="Image URL" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm">Name</label>
+                            <input type="text" class="form-control form-control-sm member-name-input" value="${name}" data-index="${index}" placeholder="Name" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label form-label-sm">Role / Position</label>
+                            <input type="text" class="form-control form-control-sm member-role-input" value="${role}" data-index="${index}" placeholder="Role" />
+                        </div>
+                    </div>
+                </div>
+            `);
+      membersEditor.append(memberCard);
+    });
+    membersEditor.find(".member-img").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".team-member").eq(index).find("img").attr("src", this.value);
+    });
+    membersEditor.find(".member-name-input").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".team-member").eq(index).find(".card-title, .member-name").text(this.value);
+    });
+    membersEditor.find(".member-role-input").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".team-member").eq(index).find(".card-text, .member-role").text(this.value);
+    });
+    membersEditor.find(".btn-remove-member").on("click", function() {
+      let index = $(this).data("index");
+      let members = keditor.getSettingComponent().find(".team-member");
+      if (members.length > 1) {
+        members.eq(index).remove();
+        let self = KEditor$1.components["team"];
+        self.refreshMembersEditor(form, keditor);
+      }
     });
   },
   showSettingForm: function(form, component, keditor) {
@@ -3845,6 +4273,8 @@ KEditor$1.components["team"] = {
     } else {
       form.find(".team-layout").val("3");
     }
+    form.find(".team-css-class").val(component.find(".team-row").attr("data-custom-class") || "");
+    this.refreshMembersEditor(form, keditor);
   }
 };
 KEditor$1.components["countdown"] = {
@@ -3875,11 +4305,19 @@ KEditor$1.components["countdown"] = {
       let hoursEl = countdownDom.querySelector(".countdown-hours");
       let minutesEl = countdownDom.querySelector(".countdown-minutes");
       let secondsEl = countdownDom.querySelector(".countdown-seconds");
+      let expiredMsg = countdownDom.getAttribute("data-expired-message");
       if (distance < 0) {
-        if (daysEl) daysEl.textContent = "00";
-        if (hoursEl) hoursEl.textContent = "00";
-        if (minutesEl) minutesEl.textContent = "00";
-        if (secondsEl) secondsEl.textContent = "00";
+        if (expiredMsg) {
+          let msgEl = countdownDom.querySelector(".countdown-expired");
+          if (!msgEl) {
+            countdownDom.innerHTML = '<div class="countdown-expired alert alert-warning text-center">' + expiredMsg + "</div>";
+          }
+        } else {
+          if (daysEl) daysEl.textContent = "00";
+          if (hoursEl) hoursEl.textContent = "00";
+          if (minutesEl) minutesEl.textContent = "00";
+          if (secondsEl) secondsEl.textContent = "00";
+        }
         return;
       }
       let days = Math.floor(distance / (1e3 * 60 * 60 * 24));
@@ -3907,12 +4345,47 @@ KEditor$1.components["countdown"] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Labels</label>
+                    <div class="col-sm-12">
+                        <div class="row g-1">
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-days" placeholder="days" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-hours" placeholder="hours" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-mins" placeholder="mins" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-secs" placeholder="secs" /></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Expired Message</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control countdown-expired-msg" placeholder="e.g. Event has ended!" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Color Theme</label>
+                    <div class="col-sm-12">
+                        <select class="form-select countdown-color">
+                            <option value="bg-primary">Primary (Blue)</option>
+                            <option value="bg-success">Success (Green)</option>
+                            <option value="bg-danger">Danger (Red)</option>
+                            <option value="bg-warning text-dark">Warning (Yellow)</option>
+                            <option value="bg-dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="col-sm-12 form-label">Style</label>
                     <div class="col-sm-12">
                         <select class="form-select countdown-style">
                             <option value="boxes">Boxes</option>
                             <option value="inline">Inline</option>
                         </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control countdown-css-class" placeholder="e.g. my-custom-countdown" />
                     </div>
                 </div>
             </form>
@@ -3922,35 +4395,89 @@ KEditor$1.components["countdown"] = {
       let component = keditor.getSettingComponent();
       component.find(".countdown-timer").attr("data-target-date", this.value);
     });
+    form.find(".label-days").on("input", function() {
+      keditor.getSettingComponent().find(".countdown-box .countdown-label").eq(0).text(this.value || "days");
+    });
+    form.find(".label-hours").on("input", function() {
+      keditor.getSettingComponent().find(".countdown-box .countdown-label").eq(1).text(this.value || "hours");
+    });
+    form.find(".label-mins").on("input", function() {
+      keditor.getSettingComponent().find(".countdown-box .countdown-label").eq(2).text(this.value || "mins");
+    });
+    form.find(".label-secs").on("input", function() {
+      keditor.getSettingComponent().find(".countdown-box .countdown-label").eq(3).text(this.value || "secs");
+    });
+    form.find(".countdown-expired-msg").on("input", function() {
+      keditor.getSettingComponent().find(".countdown-timer").attr("data-expired-message", this.value);
+    });
+    form.find(".countdown-color").on("change", function() {
+      let boxes = keditor.getSettingComponent().find(".countdown-box");
+      boxes.removeClass("bg-primary bg-success bg-danger bg-warning bg-dark text-dark text-white");
+      boxes.addClass(this.value);
+      if (this.value.includes("warning")) {
+        boxes.removeClass("text-white");
+      } else {
+        boxes.addClass("text-white");
+      }
+    });
     let styleSelect = form.find(".countdown-style");
     styleSelect.on("change", function() {
       let countdownEl = keditor.getSettingComponent().find(".countdown-timer");
       countdownEl.removeClass("countdown-boxes countdown-inline");
       countdownEl.addClass("countdown-" + this.value);
     });
+    let cssClassInput = form.find(".countdown-css-class");
+    cssClassInput.on("input", function() {
+      let countdownEl = keditor.getSettingComponent().find(".countdown-timer");
+      let customClass = countdownEl.attr("data-custom-class") || "";
+      if (customClass) countdownEl.removeClass(customClass);
+      countdownEl.attr("data-custom-class", this.value);
+      countdownEl.addClass(this.value);
+    });
   },
   showSettingForm: function(form, component, keditor) {
     let countdownEl = component.find(".countdown-timer");
     let targetDate = countdownEl.attr("data-target-date") || "";
     form.find(".countdown-date").val(targetDate);
+    let labels = component.find(".countdown-box .countdown-label");
+    if (labels.length >= 4) {
+      form.find(".label-days").val(labels.eq(0).text());
+      form.find(".label-hours").val(labels.eq(1).text());
+      form.find(".label-mins").val(labels.eq(2).text());
+      form.find(".label-secs").val(labels.eq(3).text());
+    }
+    form.find(".countdown-expired-msg").val(countdownEl.attr("data-expired-message") || "");
+    let box = component.find(".countdown-box").first();
+    if (box.hasClass("bg-success")) form.find(".countdown-color").val("bg-success");
+    else if (box.hasClass("bg-danger")) form.find(".countdown-color").val("bg-danger");
+    else if (box.hasClass("bg-warning")) form.find(".countdown-color").val("bg-warning text-dark");
+    else if (box.hasClass("bg-dark")) form.find(".countdown-color").val("bg-dark");
+    else form.find(".countdown-color").val("bg-primary");
     if (countdownEl.hasClass("countdown-inline")) {
       form.find(".countdown-style").val("inline");
     } else {
       form.find(".countdown-style").val("boxes");
     }
+    form.find(".countdown-css-class").val(countdownEl.attr("data-custom-class") || "");
   }
 };
 KEditor$1.components["carousel"] = {
   settingEnabled: true,
   settingTitle: "Carousel Settings",
   init: function(contentArea, container, component, keditor) {
+    this.initSwiper(component);
+  },
+  initSwiper: function(component) {
     if (typeof Swiper !== "undefined") {
       let swiperEl = component.find(".swiper")[0];
-      if (swiperEl && !swiperEl.swiper) {
+      if (swiperEl) {
+        if (swiperEl.swiper) {
+          swiperEl.swiper.destroy();
+        }
         new Swiper(swiperEl, {
           loop: true,
           autoplay: {
-            delay: 5e3,
+            delay: parseInt(component.find(".swiper").attr("data-delay") || 5e3),
             disableOnInteraction: false
           },
           pagination: {
@@ -3966,6 +4493,7 @@ KEditor$1.components["carousel"] = {
     }
   },
   initSettingForm: function(form, keditor) {
+    let self = this;
     form.append(`
             <form class="form-horizontal">
                 <div class="mb-3">
@@ -3978,14 +4506,6 @@ KEditor$1.components["carousel"] = {
                     <label class="col-sm-12 form-label">Options</label>
                     <div class="col-sm-12">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input carousel-loop" id="carousel-loop" checked />
-                            <label class="form-check-label" for="carousel-loop">Loop</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input carousel-autoplay" id="carousel-autoplay" checked />
-                            <label class="form-check-label" for="carousel-autoplay">Autoplay</label>
-                        </div>
-                        <div class="form-check">
                             <input type="checkbox" class="form-check-input carousel-pagination" id="carousel-pagination" checked />
                             <label class="form-check-label" for="carousel-pagination">Show Pagination</label>
                         </div>
@@ -3996,24 +4516,23 @@ KEditor$1.components["carousel"] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Slides</label>
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-sm btn-primary btn-add-slide w-100">+ Add Slide</button>
+                        <div class="slides-editor"></div>
+                        <button type="button" class="btn btn-sm btn-primary btn-add-slide w-100 mt-2">+ Add Slide</button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control carousel-css-class" placeholder="e.g. my-custom-carousel" />
                     </div>
                 </div>
             </form>
         `);
-    let self = this;
-    let updateSwiper = function() {
-      let component = keditor.getSettingComponent();
-      let swiperEl = component.find(".swiper")[0];
-      if (swiperEl && swiperEl.swiper) {
-        swiperEl.swiper.destroy();
-      }
-      self.init(null, null, component, keditor);
-    };
     form.find(".carousel-delay").on("change", function() {
       keditor.getSettingComponent().find(".swiper").attr("data-delay", this.value);
-      updateSwiper();
+      self.initSwiper(keditor.getSettingComponent());
     });
     form.find(".carousel-pagination").on("change", function() {
       keditor.getSettingComponent().find(".swiper-pagination").toggle(this.checked);
@@ -4027,15 +4546,88 @@ KEditor$1.components["carousel"] = {
       swiperWrapper.append(`
                 <div class="swiper-slide">
                     <div class="testimonial-slide text-center p-4">
-                        <img src="https://placehold.co/80" class="rounded-circle mb-3" alt="Avatar">
+                        <img src="https://placehold.co/80" class="rounded-circle mb-3 slide-avatar" alt="Avatar">
                         <blockquote class="blockquote">
-                            <p>"New testimonial quote here."</p>
+                            <p class="slide-quote">"New testimonial quote here."</p>
                         </blockquote>
-                        <footer class="blockquote-footer">Author Name</footer>
+                        <footer class="blockquote-footer slide-author">Author Name, <cite class="slide-title">Title</cite></footer>
                     </div>
                 </div>
             `);
-      updateSwiper();
+      self.initSwiper(keditor.getSettingComponent());
+      self.refreshSlidesEditor(form, keditor);
+    });
+    let cssClassInput = form.find(".carousel-css-class");
+    cssClassInput.on("input", function() {
+      let swiper = keditor.getSettingComponent().find(".swiper");
+      let customClass = swiper.attr("data-custom-class") || "";
+      if (customClass) swiper.removeClass(customClass);
+      swiper.attr("data-custom-class", this.value);
+      swiper.addClass(this.value);
+    });
+  },
+  refreshSlidesEditor: function(form, keditor) {
+    let slidesEditor = form.find(".slides-editor");
+    slidesEditor.empty();
+    keditor.getSettingComponent().find(".swiper-slide").each(function(index) {
+      let slide = $(this);
+      let imgSrc = slide.find("img").attr("src") || "";
+      let quote = slide.find(".blockquote p, .slide-quote").text() || "";
+      let footer = slide.find(".blockquote-footer").clone();
+      footer.find("cite").remove();
+      let author = footer.text().replace(",", "").trim();
+      let title = slide.find("cite").text() || "";
+      let slideCard = $(`
+                <div class="card mb-2" data-index="${index}">
+                    <div class="card-header p-2 d-flex justify-content-between align-items-center">
+                        <span>Slide ${index + 1}</span>
+                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-slide" data-index="${index}">×</button>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm slide-img" value="${imgSrc}" data-index="${index}" placeholder="Avatar URL" />
+                        </div>
+                        <div class="mb-2">
+                            <textarea class="form-control form-control-sm slide-quote-input" rows="2" data-index="${index}" placeholder="Quote text">${quote}</textarea>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm slide-author-input" value="${author}" data-index="${index}" placeholder="Author Name" />
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm slide-title-input" value="${title}" data-index="${index}" placeholder="Author Title" />
+                        </div>
+                    </div>
+                </div>
+            `);
+      slidesEditor.append(slideCard);
+    });
+    let self = this;
+    slidesEditor.find(".slide-img").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".swiper-slide").eq(index).find("img").attr("src", this.value);
+    });
+    slidesEditor.find(".slide-quote-input").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".swiper-slide").eq(index).find(".blockquote p, .slide-quote").text(this.value);
+    });
+    slidesEditor.find(".slide-author-input").on("input", function() {
+      let index = $(this).data("index");
+      let slide = keditor.getSettingComponent().find(".swiper-slide").eq(index);
+      let title = slide.find("cite").text();
+      slide.find(".blockquote-footer").html(this.value + ", <cite>" + title + "</cite>");
+    });
+    slidesEditor.find(".slide-title-input").on("input", function() {
+      let index = $(this).data("index");
+      keditor.getSettingComponent().find(".swiper-slide").eq(index).find("cite").text(this.value);
+    });
+    slidesEditor.find(".btn-remove-slide").on("click", function() {
+      let index = $(this).data("index");
+      let slides = keditor.getSettingComponent().find(".swiper-slide");
+      if (slides.length > 1) {
+        slides.eq(index).remove();
+        self.initSwiper(keditor.getSettingComponent());
+        self.refreshSlidesEditor(form, keditor);
+      }
     });
   },
   showSettingForm: function(form, component, keditor) {
@@ -4044,6 +4636,8 @@ KEditor$1.components["carousel"] = {
     form.find(".carousel-delay").val(delay);
     form.find(".carousel-pagination").prop("checked", component.find(".swiper-pagination").is(":visible"));
     form.find(".carousel-navigation").prop("checked", component.find(".swiper-button-next").is(":visible"));
+    form.find(".carousel-css-class").val(swiperEl.attr("data-custom-class") || "");
+    this.refreshSlidesEditor(form, keditor);
   }
 };
 //# sourceMappingURL=keditor.es.js.map

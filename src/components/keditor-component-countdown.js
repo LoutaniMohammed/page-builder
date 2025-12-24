@@ -42,11 +42,21 @@ KEditor.components['countdown'] = {
             let minutesEl = countdownDom.querySelector('.countdown-minutes');
             let secondsEl = countdownDom.querySelector('.countdown-seconds');
             
+            // Check for expired message
+            let expiredMsg = countdownDom.getAttribute('data-expired-message');
+            
             if (distance < 0) {
-                if (daysEl) daysEl.textContent = '00';
-                if (hoursEl) hoursEl.textContent = '00';
-                if (minutesEl) minutesEl.textContent = '00';
-                if (secondsEl) secondsEl.textContent = '00';
+                if (expiredMsg) {
+                    let msgEl = countdownDom.querySelector('.countdown-expired');
+                    if (!msgEl) {
+                        countdownDom.innerHTML = '<div class="countdown-expired alert alert-warning text-center">' + expiredMsg + '</div>';
+                    }
+                } else {
+                    if (daysEl) daysEl.textContent = '00';
+                    if (hoursEl) hoursEl.textContent = '00';
+                    if (minutesEl) minutesEl.textContent = '00';
+                    if (secondsEl) secondsEl.textContent = '00';
+                }
                 return;
             }
             
@@ -82,12 +92,47 @@ KEditor.components['countdown'] = {
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label class="col-sm-12 form-label">Labels</label>
+                    <div class="col-sm-12">
+                        <div class="row g-1">
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-days" placeholder="days" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-hours" placeholder="hours" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-mins" placeholder="mins" /></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm label-secs" placeholder="secs" /></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Expired Message</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control countdown-expired-msg" placeholder="e.g. Event has ended!" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Color Theme</label>
+                    <div class="col-sm-12">
+                        <select class="form-select countdown-color">
+                            <option value="bg-primary">Primary (Blue)</option>
+                            <option value="bg-success">Success (Green)</option>
+                            <option value="bg-danger">Danger (Red)</option>
+                            <option value="bg-warning text-dark">Warning (Yellow)</option>
+                            <option value="bg-dark">Dark</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label class="col-sm-12 form-label">Style</label>
                     <div class="col-sm-12">
                         <select class="form-select countdown-style">
                             <option value="boxes">Boxes</option>
                             <option value="inline">Inline</option>
                         </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="col-sm-12 form-label">Custom CSS Class</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control countdown-css-class" placeholder="e.g. my-custom-countdown" />
                     </div>
                 </div>
             </form>
@@ -97,7 +142,35 @@ KEditor.components['countdown'] = {
         dateInput.on('change', function () {
             let component = keditor.getSettingComponent();
             component.find('.countdown-timer').attr('data-target-date', this.value);
-            // No need to restart, the interval re-reads from DOM
+        });
+        
+        // Label inputs
+        form.find('.label-days').on('input', function () {
+            keditor.getSettingComponent().find('.countdown-box .countdown-label').eq(0).text(this.value || 'days');
+        });
+        form.find('.label-hours').on('input', function () {
+            keditor.getSettingComponent().find('.countdown-box .countdown-label').eq(1).text(this.value || 'hours');
+        });
+        form.find('.label-mins').on('input', function () {
+            keditor.getSettingComponent().find('.countdown-box .countdown-label').eq(2).text(this.value || 'mins');
+        });
+        form.find('.label-secs').on('input', function () {
+            keditor.getSettingComponent().find('.countdown-box .countdown-label').eq(3).text(this.value || 'secs');
+        });
+        
+        form.find('.countdown-expired-msg').on('input', function () {
+            keditor.getSettingComponent().find('.countdown-timer').attr('data-expired-message', this.value);
+        });
+        
+        form.find('.countdown-color').on('change', function () {
+            let boxes = keditor.getSettingComponent().find('.countdown-box');
+            boxes.removeClass('bg-primary bg-success bg-danger bg-warning bg-dark text-dark text-white');
+            boxes.addClass(this.value);
+            if (this.value.includes('warning')) {
+                boxes.removeClass('text-white');
+            } else {
+                boxes.addClass('text-white');
+            }
         });
         
         let styleSelect = form.find('.countdown-style');
@@ -106,6 +179,15 @@ KEditor.components['countdown'] = {
             countdownEl.removeClass('countdown-boxes countdown-inline');
             countdownEl.addClass('countdown-' + this.value);
         });
+        
+        let cssClassInput = form.find('.countdown-css-class');
+        cssClassInput.on('input', function () {
+            let countdownEl = keditor.getSettingComponent().find('.countdown-timer');
+            let customClass = countdownEl.attr('data-custom-class') || '';
+            if (customClass) countdownEl.removeClass(customClass);
+            countdownEl.attr('data-custom-class', this.value);
+            countdownEl.addClass(this.value);
+        });
     },
     
     showSettingForm: function (form, component, keditor) {
@@ -113,10 +195,30 @@ KEditor.components['countdown'] = {
         let targetDate = countdownEl.attr('data-target-date') || '';
         form.find('.countdown-date').val(targetDate);
         
+        // Get labels
+        let labels = component.find('.countdown-box .countdown-label');
+        if (labels.length >= 4) {
+            form.find('.label-days').val(labels.eq(0).text());
+            form.find('.label-hours').val(labels.eq(1).text());
+            form.find('.label-mins').val(labels.eq(2).text());
+            form.find('.label-secs').val(labels.eq(3).text());
+        }
+        
+        form.find('.countdown-expired-msg').val(countdownEl.attr('data-expired-message') || '');
+        
+        let box = component.find('.countdown-box').first();
+        if (box.hasClass('bg-success')) form.find('.countdown-color').val('bg-success');
+        else if (box.hasClass('bg-danger')) form.find('.countdown-color').val('bg-danger');
+        else if (box.hasClass('bg-warning')) form.find('.countdown-color').val('bg-warning text-dark');
+        else if (box.hasClass('bg-dark')) form.find('.countdown-color').val('bg-dark');
+        else form.find('.countdown-color').val('bg-primary');
+        
         if (countdownEl.hasClass('countdown-inline')) {
             form.find('.countdown-style').val('inline');
         } else {
             form.find('.countdown-style').val('boxes');
         }
+        
+        form.find('.countdown-css-class').val(countdownEl.attr('data-custom-class') || '');
     }
 };
